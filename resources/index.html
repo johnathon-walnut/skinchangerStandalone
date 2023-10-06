@@ -1,18 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Skin changer</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
     <style>
-        html, body {
-            height: 100%;
-            background-color: #0D1017;
-        }
-
-        p, h1, h2 {
+        p,
+        h1,
+        h2 {
             color: #fff !important;
         }
     </style>
@@ -527,54 +525,58 @@
         };
     </script>
 </head>
+
 <body>
-    <header class="container-fluid">
+    <div class="container">
         <div class="row">
+            <!-- Page title -->
             <div class="col-12">
                 <div style="text-align: center;">
-                    <h1>Skinchanger</h1>
+                    <h2>Skinchanger</h2>
+                </div>
+            </div>
+
+            <hr />
+
+            <!-- Info -->
+            <div class="row">
+                <div class="d-flex">
+                    <div class="p-2 flex-grow-1">
+                        <h4 id="weapon">Current Weapon: </h4>
+                    </div>
+
+                    <div class="p-2">
+                        <button type="button" class="btn btn-primary btn-sm" onclick="save()">Save</button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="load()">Load</button>
+                    </div>
                 </div>
             </div>
         </div>
-        <hr />
-        <div class="row">
-            <div class="col-12">
-                <h2 id="weapon">Weapon: </h2>
-                <button class="btn btn-primary" onclick="save()">Save</button>
-                <button class="btn btn-primary" onclick="load()">Load</button>
-            </div>
-        </div>
-    </header>
 
-    <div class="container-fluid" style="border: 1px solid #007BFF; padding:15px; margin:15px; height:auto; width: auto">
-        <div class="row">
-            <div id="possibleAttributes" class="col-md-4" style="border-right: 1px dashed #007BFF;">
-                <div style="text-align: center;">
-                    <h2>Possible attributes</h2>
+        <div class="row p-2 border border-primary">
+
+            <!-- Possible attributes -->
+            <div class="col-md-4 border-end border-dashed border-primary-subtle">
+                <div class="container">
+                    <!-- Title -->
+                    <div class="row text-center">
+                        <h3>Possible attributes</h3>
+                    </div>
+
+                    <!-- Content -->
+                    <div id="possibleAttributes" class="row row-cols-1 gy-1"></div>
                 </div>
-                <style>
-                    .addButton {
-                        /* Wants to be one per line, instead of all clumped up */
-                        display: block;
-                    }
-
-                    .floatRight {
-                        float: right;
-                    }
-                </style>
 
                 <script>
                     attributes = $("#possibleAttributes");
                     button = (label, name, index, type) => {
-                        return `<button class="btn btn-primary addButton" onclick="addAttribute('${label}', '${name}', ${type})">${label}</button>`;
+                        return `<button class="btn btn-primary" onclick="addAttribute('${label}', '${name}', ${type})">${label}</button>`;
                     }
 
                     // type 0 = int
                     // type 1 = bool
                     // type 2 = float
                     // type 3 = combo (lets do special cases for each type of combo (mainly set_attached_particle and killstreak_idleeffect))
-
-
 
                     attributes.append(button("Paint kit skin", "paintkit_proto_def_index", 834, 3));
                     attributes.append(button("Paint kit wear", "set_item_texture_wear", 725, 2));
@@ -780,7 +782,7 @@
                             return;
                         }
 
-                        $("#actualAttributes").append(`<p id='${name}_added'>${label} <button class="btn btn-danger floatRight">-</button></p>`);
+                        $("#actualAttributes").append(`<p id='${name}_added'>${label} <button type="button" class="btn btn-danger float-end">-</button></p>`);
 
                         // add a onclick to the button
                         $(`#${name}_added button`).click(function () {
@@ -789,17 +791,17 @@
 
                         switch (type) {
                             case 0:
-                                $("#options").append(`<p id='${name}_options'>${label} <input class="floatRight" id='${name}' type="number" value="0"></p>`);
+                                $("#options").append(`<p id='${name}_options'>${label} <input class="float-end" id='${name}' type="number" value="0"></p>`);
                                 break;
                             case 1:
                                 // Does this send a 1 or a "true"? I think it sends a 1 :thinking: IT DOES NOT, IT SENDS "on" WTF LOL i hate javascript
-                                $("#options").append(`<p id='${name}_options'>${label} <input class="floatRight" id='${name}' type="checkbox"></p>`);
+                                $("#options").append(`<p id='${name}_options'>${label} <input class="float-end" id='${name}' type="checkbox"></p>`);
                                 break;
                             case 2:
-                                $("#options").append(`<p id='${name}_options'>${label} <input class="floatRight" id='${name}' type="number" value="0.0"></p>`);
+                                $("#options").append(`<p id='${name}_options'>${label} <input class="float-end" id='${name}' type="number" value="0.0"></p>`);
                                 break;
                             case 3:
-                                $("#options").append(`<p id='${name}_options'>${label} <select class="floatRight" id='${name}'></select></p>`);
+                                $("#options").append(`<p id='${name}_options'>${label} <select class="float-end" id='${name}'></select></p>`);
                                 let selector = $(`#${name}`);
                                 if (name == "paintkit_proto_def_index") {
 
@@ -824,22 +826,34 @@
                     }
                 </script>
             </div>
-            <div class="col-md-4" style="border-right: 1px dashed #007BFF;">
-                <div style="text-align: center;">
-                    <h2>Actual attributes</h2>
-                </div>
-                <div id="actualAttributes">
 
-                </div>
-            </div>
+            <!-- Selected attributes-->
             <div class="col-md-4">
-                <div style="text-align: center;">
-                    <h2>Attribute options</h2>
-                </div>
-                <div id="options">
+                <div class="container">
+                    <!-- Title -->
+                    <div class="row text-center">
+                        <h3>Selected attributes</h3>
+                    </div>
 
+                    <!-- Content -->
+                    <div id="actualAttributes"></div>
                 </div>
             </div>
+
+            <!-- Attribute values -->
+            <div class="col-md-4 border-start border-dashed border-primary-subtle">
+                <div class="container">
+                    <!-- Title -->
+                    <div class="row text-center">
+                        <h3>Attribute values</h3>
+                    </div>
+
+                    <div id="options">
+
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -987,4 +1001,5 @@
         setInterval(updateWeaponIndex, 1000);
     </script>
 </body>
+
 </html>
