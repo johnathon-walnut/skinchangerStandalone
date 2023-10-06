@@ -54,7 +54,7 @@ void WebInterface::Init()
 
 					  int index = std::stoi(strIndex);
 
-					  g_SkinChanger.WebRemoveAttribute(index, strAttribute);
+					  g_SkinChanger.RemoveAttribute(index, strAttribute);
 				  });
 
 	m_Server->Get("/update", [&](const httplib::Request& req, httplib::Response& res)
@@ -72,7 +72,7 @@ void WebInterface::Init()
 					  int index = std::stoi(strIndex);
 					  float value = std::stof(strValue);
 
-					  g_SkinChanger.WebSetAttribute(index, strAttribute, value);
+					  g_SkinChanger.SetAttribute(index, strAttribute, value);
 				  });
 
 	m_Server->Get("/save", [&](const httplib::Request& req, httplib::Response& res)
@@ -89,7 +89,7 @@ void WebInterface::Init()
 
 	m_Server->Get("/weaponIndex", [&](const httplib::Request& req, httplib::Response& res)
 				  {
-					  res.set_content(std::format("{}", g_SkinChanger.m_nCurrentWeaponIndex), "text/plain");
+					  res.set_content(std::format("{}", g_SkinChanger.GetWeaponIndex()), "text/plain");
 				  });
 
 	m_Server->Get("/getForIndex", [&](const httplib::Request& req, httplib::Response& res)
@@ -123,7 +123,7 @@ void WebInterface::Init()
 
 	if (!m_ServerThread)
 	{
-		m_ServerThread = std::make_unique<std::thread>([this]()
+		m_ServerThread = std::make_unique<std::thread>([&]()
 													   {
 														   m_Server->listen("localhost", 4077);
 													   });

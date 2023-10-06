@@ -2,6 +2,7 @@
 
 #include <array>
 #include <format>
+#include "../../utils/json.hpp"
 
 enum ETFWeapons
 {
@@ -624,17 +625,14 @@ enum ETFWeapons
 	Misc_t_Saxxy = 423,
 };
 
-
-//SIGNATURE(ItemSystem, "client.dll", "A1 ? ? ? ? 85 C0 75 ? 56");
-SIGNATURE(GetItemSchema, "client.dll", "E8 ? ? ? ? 83 C0 ? C3 CC");
-SIGNATURE(CEconItemSchema_GetAttributeDefinition, "client.dll", "55 8B EC 83 EC ? 53 56 8B D9 8D 4D ? 57 E8 ? ? ? ? 8B 45");
-SIGNATURE(CAttributeList_SetRuntimeAttributeValue, "client.dll", "55 8B EC 83 EC ? 33 C0 53 8B D9 56 57 8B 7D");
-
-
 //SIGNATURE(C_EconEntity_OnDataChanged, "client.dll", "55 8B EC 83 EC ? 53 56 8B 75 ? 8B D9 89 5D ? 85 F6 75 ? 8D 4B");
 //SIGNATURE(ISchemaAttributeType_OnIterateAttributeValue, "client.dll", "55 8B EC 8B 4D ? 8B 45 ? 8B 11 FF 30 FF 75 ? 8B 42 ? FF D0 5D C2 ? ? CC CC CC CC CC CC CC 55 8B EC 8B 4D ? 8B 45 ? 51", 0);
 //SIGNATURE(GetPaintKitMaterialOverride, "client.dll", "55 8B EC 83 EC ? 56 8B 75 ? 8D 45 ? 57 50");
 //SIGNATURE(CTFItemDefinition_GetValidPaintKits, "client.dll", "55 8B EC 83 EC ? 53 8B D9 56 57 89 5D ? 80 BB ? ? ? ? ? 0F 85 ? ? ? ? C6 83");
+//SIGNATURE(ItemSystem, "client.dll", "A1 ? ? ? ? 85 C0 75 ? 56");
+SIGNATURE(GetItemSchema, "client.dll", "E8 ? ? ? ? 83 C0 ? C3 CC");
+SIGNATURE(CEconItemSchema_GetAttributeDefinition, "client.dll", "55 8B EC 83 EC ? 53 56 8B D9 8D 4D ? 57 E8 ? ? ? ? 8B 45");
+SIGNATURE(CAttributeList_SetRuntimeAttributeValue, "client.dll", "55 8B EC 83 EC ? 33 C0 53 8B D9 56 57 8B 7D");
 
 class CAttribute
 {
@@ -713,6 +711,12 @@ public:
 
 void SkinChanger::ApplySkins()
 {
+	if (!m_bInitialSkinLoad)
+	{
+		Load();
+		m_bInitialSkinLoad = true;
+	}
+
 	auto pLocal = (Player*)I::EntityList->GetClientEntity(I::EngineClient->GetLocalPlayer());
 	if (!pLocal)
 		return;
@@ -743,10 +747,20 @@ void SkinChanger::ApplySkins()
 		Redirect(Pyro_s_PyrosShotgun, Pyro_s_ShotgunR);
 		Redirect(Heavy_s_HeavysShotgun, Heavy_s_ShotgunR);
 		Redirect(Engi_m_EngineersShotgun, Engi_m_ShotgunR);
+		Redirect(Scout_t_Bat, Scout_t_BatR);
+		Redirect(Soldier_t_Shovel, Soldier_t_ShovelR);
+		Redirect(Pyro_t_FireAxe, Pyro_t_FireAxeR);
+		Redirect(Demoman_t_Bottle, Demoman_t_BottleR);
+		Redirect(Medic_t_Bonesaw, Medic_t_BonesawR);
+		Redirect(Sniper_t_Kukri, Sniper_t_KukriR);
 		default: break;
 	}
 
-	ConsumeCommands();
+	if (m_bForceFullUpdate)
+	{
+		I::ClientState->ForceFullUpdate();
+		m_bForceFullUpdate = false;
+	}
 
 	m_nCurrentWeaponIndex = nWeaponIndex;
 
@@ -761,25 +775,16 @@ void SkinChanger::ApplySkins()
 	auto PreFilledAttributeCount = [&](int index) -> int
 	{
 		// Most weapons have no attributes, some have more than one. @Fedoraware this is why bazaar bargain doesn't work btw
-
 		switch (index)
 		{
-			case Sniper_m_TheBazaarBargain:
-			{
-				return 1;
-			}
-
+			case Sniper_m_TheBazaarBargain: return 1;
 			default: return 0;
 		}
-
-		return 0;
 	};
 
 	// If we have attributes, we've already applied the skin
 	if (attributeList->m_Attributes.Count() > PreFilledAttributeCount(m_nCurrentWeaponIndex))
-	{
 		return;
-	}
 
 	// Apply the skin
 	const auto& vecAttributes = m_Skins[nWeaponIndex].m_Attributes;
@@ -790,17 +795,66 @@ void SkinChanger::ApplySkins()
 		attributeList->SetAttribute(attribute.attributeIndex, attribute.attributeValue);
 }
 
-#include "../../utils/json.hpp"
+void SkinChanger::SetAttribute(int index, std::string attributeStr, float value)
+{
+	if (index == -1)
+		return;
+
+	uint16_t attributeIndex = attributes::StringToAttribute(attributeStr);
+
+	if (attributeIndex == attributes::paintkit_proto_def_index)
+		value = IntToStupidFloat(static_cast<int>(value));
+
+	if (m_Skins.find(index) == m_Skins.end())
+		m_Skins[index] = SkinInfo();
+
+	// Check if attribute already exists, if so, update it
+	bool bFound = false;
+
+	for (auto& attribute : m_Skins[index].m_Attributes)
+	{
+		if (attribute.attributeIndex == attributeIndex)
+		{
+			attribute.attributeValue = value;
+
+			bFound = true;
+			break;
+		}
+	}
+
+	if (!bFound)// Attribute doesn't exist, add it
+		m_Skins[index].m_Attributes.push_back({ attributeIndex, value });
+
+	m_bForceFullUpdate = true;
+}
+
+void SkinChanger::RemoveAttribute(int index, std::string attributeStr)
+{
+	if (m_Skins.find(index) == m_Skins.end())
+		return;
+
+	auto& attributes = m_Skins[index].m_Attributes;
+
+	uint16_t attributeIndex = attributes::StringToAttribute(attributeStr);
+
+	// Find attribute
+	for (auto it = attributes.begin(); it != attributes.end(); ++it)
+	{
+		if (it->attributeIndex == attributeIndex)
+		{
+			attributes.erase(it);
+			m_bForceFullUpdate = true;
+
+			return;
+		}
+	}
+}
 
 void SkinChanger::Save()
 {
 	std::ofstream file("skins.json");
 	if (!file.good())
 		return;
-
-	// Actually I suppose it's fine if we don't have any skins
-	/*if (m_Skins.empty())
-		return;*/
 
 	nlohmann::json j;
 

@@ -66,123 +66,32 @@ __forceinline int StupidFloatToInt(float desiredValue)
 	return *reinterpret_cast<int*>(&desiredValue);
 }
 
+struct Attribute
+{
+	uint16_t attributeIndex;
+	float attributeValue;
+};
+
+struct SkinInfo
+{
+	std::vector<Attribute> m_Attributes;
+};
+
 class SkinChanger
 {
-
+	std::unordered_map<int, SkinInfo> m_Skins;
+	bool m_bForceFullUpdate = false;
+	int m_nCurrentWeaponIndex = -1;
+	bool m_bInitialSkinLoad = false;
 
 public:
 	void ApplySkins();
 
-	int m_nCurrentWeaponIndex = -1;
-private:
-	struct SkinInfo
-	{
-		struct Attribute
-		{
-			uint16_t attributeIndex;
-			float attributeValue;
-		};
-		std::vector<Attribute> m_Attributes;
-	};
+	int GetWeaponIndex() const { return m_nCurrentWeaponIndex; }
 
-	std::unordered_map<int, SkinInfo> m_Skins;
-
-	struct SetAttributeCommand
-	{
-		int index;
-		uint16_t attributeIndex;
-		float value;
-	};
-
-	std::vector<SetAttributeCommand> m_Commands;
-	bool m_bForceFullUpdate = false;
-
-public:
-	inline void WebSetAttribute(int index, std::string attributeStr, float value)
-	{
-		if (index == -1)
-			return;
-
-		uint16_t attributeIndex = attributes::StringToAttribute(attributeStr);
-
-		m_Commands.push_back({ index, attributeIndex, value });
-
-#ifdef _DEBUG
-		// lets log the entire map
-		for (auto& skin : m_Skins)
-		{
-			std::cout << "Weapon index: " << skin.first << std::endl;
-			for (auto& attribute : skin.second.m_Attributes)
-			{
-				std::cout << "Attribute index: " << attribute.attributeIndex << " value: " << attribute.attributeValue << std::endl;
-			}
-		}
-#endif
-	}
-
-	inline void WebRemoveAttribute(int index, std::string attributeStr)
-	{
-		if (m_Skins.find(index) == m_Skins.end())
-			return;
-
-		auto& attributes = m_Skins[index].m_Attributes;
-
-		uint16_t attributeIndex = attributes::StringToAttribute(attributeStr);
-#ifdef _DEBUG
-		std::cout << "Removing attribute: " << attributeIndex << " (" << attributeStr << ")" << std::endl; // "Removing attribute: 834 (paintkit_proto_def_index)
-#endif
-		// Find attribute
-		for (auto it = attributes.begin(); it != attributes.end(); ++it)
-		{
-			if (it->attributeIndex == attributeIndex)
-			{
-				attributes.erase(it);
-				m_bForceFullUpdate = true;
-
-				return;
-			}
-		}
-	}
-
-	inline void ConsumeCommands()
-	{
-		for (auto& cmd : m_Commands)
-			SetAttribute(cmd);
-
-		if (m_Commands.size() || m_bForceFullUpdate)
-		{
-			I::ClientState->ForceFullUpdate();
-			m_bForceFullUpdate = false;
-		}
-
-		m_Commands.clear();
-	}
-
-	inline void SetAttribute(SetAttributeCommand cmd)
-	{
-		if (cmd.attributeIndex == attributes::paintkit_proto_def_index)
-		{
-			cmd.value = IntToStupidFloat(static_cast<int>(cmd.value));
-		}
-
-		if (m_Skins.find(cmd.index) == m_Skins.end())
-			m_Skins[cmd.index] = SkinInfo();
-
-		// Check if attribute already exists, if so, update it
-		for (auto& attribute : m_Skins[cmd.index].m_Attributes)
-		{
-			if (attribute.attributeIndex == cmd.attributeIndex)
-			{
-				attribute.attributeValue = cmd.value;
-				return;
-			}
-		}
-
-		// Attribute doesn't exist, add it
-		m_Skins[cmd.index].m_Attributes.push_back({ cmd.attributeIndex, cmd.value });
-	}
-
-	const SkinInfo& GetSkinInfo(int index)
+	void SetAttribute(int index, std::string attributeStr, float value);
+	void RemoveAttribute(int index, std::string attributeStr);
+	inline const SkinInfo& GetSkinInfo(int index) 
 	{
 		if (m_Skins.find(index) == m_Skins.end())
 		{
@@ -195,9 +104,6 @@ public:
 
 	void Save();
 	void Load();
-
-private:
-	bool m_bInitialSkinLoad = false;
 };
 
 inline SkinChanger g_SkinChanger;
