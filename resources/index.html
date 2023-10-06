@@ -838,19 +838,51 @@
         attributes.append(CreateAttributeButton("Item style override", "item_style_override", 542, 1));
         attributes.append(CreateAttributeButton("Killstreak sheen", "killstreak_idleeffect", 2014, 3));
 
+        function UpdateAttribute(weaponIndex, attrName, value) {
+            $.get(`/update?index=${weaponIndex}&attribute=${attrName}&value=${value}`);
+        }
+
         function CreateAttributeValue(label, name, type) {
             switch (type) {
                 case 0:
-                    return $(`<p id='${name}_options'>${label} <input class="float-end" id='${name}' type="number" value="0"></p>`);
+                    // Integer
+                    let $intItem = $(`<p id='${name}_options'>${label} <input class="float-end" id='${name}' type="number" value="0"></p>`);
+                    let $input = $intItem.find("input");
+                    
+                    $input.change(function () {
+                        let weaponIndex = $("#weapon").attr("index");
+                        UpdateAttribute(weaponIndex, name, $(this).val());
+                    });
+
+                    return $intItem;
 
                 case 1:
+                    // Checkbox
                     // Does this send a 1 or a "true"? I think it sends a 1 :thinking: IT DOES NOT, IT SENDS "on" WTF LOL i hate javascript
-                    return $(`<p id='${name}_options'>${label} <input class="float-end" id='${name}' type="checkbox"></p>`);
+                    let $chkItem = $(`<p id='${name}_options'>${label} <input class="float-end" id='${name}' type="checkbox"></p>`);
+                    let $chkInput = $chkItem.find("input");
+
+                    $chkInput.change(function () {
+                        let weaponIndex = $("#weapon").attr("index");
+                        UpdateAttribute(weaponIndex, name, $(this).is(":checked") ? 1 : 0);
+                    });
+
+                    return $chkItem;
 
                 case 2:
-                    return $(`<p id='${name}_options'>${label} <input class="float-end" id='${name}' type="number" value="0.0"></p>`);
+                    // Float
+                    let $floatItem = $(`<p id='${name}_options'>${label} <input class="float-end" id='${name}' type="number" value="0.0"></p>`);
+                    let $floatInput = $floatItem.find("input");
+
+                    $floatInput.change(function () {
+                        let weaponIndex = $("#weapon").attr("index");
+                        UpdateAttribute(weaponIndex, name, $(this).val());
+                    });
+
+                    return $floatItem;
 
                 case 3:
+                    // Combo
                     $item = $(`<p>${label} <select class="float-end" id='${name}'></select></p>`);
                     $list = $item.find("select");
                     if (name == "paintkit_proto_def_index") {
@@ -869,6 +901,12 @@
                             $list.append(`<option value="${key}">${sheenOptions[key]}</option>`);
                         }
                     }
+
+                    $list.change(function () {
+                        let weaponIndex = $("#weapon").attr("index");
+                        UpdateAttribute(weaponIndex, name, $(this).val());
+                    });
+
                     return $item;
 
                 default: break;
@@ -888,10 +926,8 @@
             $("#actualAttributes").append($button);
 
             // Add the attribute value
-            console.log(label, name, type)
             let $valueItem = CreateAttributeValue(label, name, type);
             $("#options").append($valueItem);
-            console.log($valueItem);
 
             // add a onclick to the button
             $button.find("button").click(function () {
@@ -925,29 +961,6 @@
             let index = $("#weapon").attr("index");
             $.get(`/remove?index=${index}&attribute=${name}`);
         }
-
-        $("#options").on("change", "input", function () {
-            if ($(this).attr("type") == "checkbox") {
-                let attribute = $(this).attr("id");
-                // If i just passed this it would send "on" or "off" which would not work for std::stoi lol
-                let value = $(this).is(":checked") ? 1 : 0;
-                let index = $("#weapon").attr("index");
-                $.get(`/update?index=${index}&attribute=${attribute}&value=${value}`);
-                return;
-            }
-
-            let attribute = $(this).attr("id");
-            let value = $(this).val();
-            let index = $("#weapon").attr("index");
-            $.get(`/update?index=${index}&attribute=${attribute}&value=${value}`);
-        });
-
-        $("#options").on("change", "select", function () {
-            let attribute = $(this).attr("id");
-            let value = $(this).val();
-            let index = $("#weapon").attr("index");
-            $.get(`/update?index=${index}&attribute=${attribute}&value=${value}`);
-        });
 
         // I did this to myself
         function updateWeaponIndex() {
