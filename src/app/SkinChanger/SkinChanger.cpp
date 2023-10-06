@@ -625,7 +625,7 @@ enum ETFWeapons
 };
 
 
-SIGNATURE(ItemSystem, "client.dll", "A1 ? ? ? ? 85 C0 75 ? 56");
+//SIGNATURE(ItemSystem, "client.dll", "A1 ? ? ? ? 85 C0 75 ? 56");
 SIGNATURE(GetItemSchema, "client.dll", "E8 ? ? ? ? 83 C0 ? C3 CC");
 SIGNATURE(CEconItemSchema_GetAttributeDefinition, "client.dll", "55 8B EC 83 EC ? 53 56 8B D9 8D 4D ? 57 E8 ? ? ? ? 8B 45");
 SIGNATURE(CAttributeList_SetRuntimeAttributeValue, "client.dll", "55 8B EC 83 EC ? 33 C0 53 8B D9 56 57 8B 7D");
@@ -802,6 +802,9 @@ void SkinChanger::Save()
 	for (const auto& skin : m_Skins)
 	{
 		int index = skin.first;
+		if (index == -1)
+			continue;
+
 		const auto& vecAttributes = skin.second.m_Attributes;
 		std::string strIndex = std::to_string(index);
 
@@ -829,6 +832,9 @@ void SkinChanger::Load()
 	for (auto it = j.begin(); it != j.end(); ++it)
 	{
 		int index = std::stoi(it.key());
+		if (index == -1)
+			continue;
+
 		const auto& vecAttributes = it.value();
 
 		for (auto it2 = vecAttributes.begin(); it2 != vecAttributes.end(); ++it2)
