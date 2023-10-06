@@ -820,24 +820,6 @@
             return $attrButton;
         }
 
-        // type 0 = int
-        // type 1 = bool
-        // type 2 = float
-        // type 3 = combo (lets do special cases for each type of combo (mainly set_attached_particle and killstreak_idleeffect))
-
-        // Create attribute buttons
-        attributes.append(CreateAttributeButton("Paint kit skin", "paintkit_proto_def_index", 834, 3));
-        attributes.append(CreateAttributeButton("Paint kit wear", "set_item_texture_wear", 725, 2));
-        //attributes.append(button("Paint kit seed (Low bytes)", "custom_paintkit_seed_lo", 866, 0));
-        //attributes.append(button("Paint kit seed (High bytes)", "custom_paintkit_seed_hi", 867, 0));
-        attributes.append(CreateAttributeButton("Paint kit is team coloured", "has_team_color_paintkit", 745, 1));
-        attributes.append(CreateAttributeButton("Unusual effect 1", "set_attached_particle", 134, 3));
-        attributes.append(CreateAttributeButton("Unusual effect 2", "set_attached_particle_static", 370, 3));
-        attributes.append(CreateAttributeButton("Festivized", "is_festivized", 2053, 1));
-        attributes.append(CreateAttributeButton("Australium", "is_australium_item", 2027, 1));
-        attributes.append(CreateAttributeButton("Item style override", "item_style_override", 542, 1));
-        attributes.append(CreateAttributeButton("Killstreak sheen", "killstreak_idleeffect", 2014, 3));
-
         function UpdateAttribute(weaponIndex, attrName, value) {
             $.get(`/update?index=${weaponIndex}&attribute=${attrName}&value=${value}`);
         }
@@ -846,68 +828,76 @@
             switch (type) {
                 case 0:
                     // Integer
-                    let $intItem = $(`<p id='${name}_options'>${label} <input class="float-end" id='${name}' type="number" value="0"></p>`);
-                    let $input = $intItem.find("input");
-                    
-                    $input.change(function () {
-                        let weaponIndex = $("#weapon").attr("index");
-                        UpdateAttribute(weaponIndex, name, $(this).val());
-                    });
+                    {
+                        let $item = $(`<p>${label} <input class="float-end" type="number" value="0"></p>`);
+                        let $input = $item.find("input");
 
-                    return $intItem;
+                        $input.change(function () {
+                            let weaponIndex = $("#weapon").attr("index");
+                            UpdateAttribute(weaponIndex, name, $(this).val());
+                        });
+
+                        return $item;
+                    }
 
                 case 1:
                     // Checkbox
-                    // Does this send a 1 or a "true"? I think it sends a 1 :thinking: IT DOES NOT, IT SENDS "on" WTF LOL i hate javascript
-                    let $chkItem = $(`<p id='${name}_options'>${label} <input class="float-end" id='${name}' type="checkbox"></p>`);
-                    let $chkInput = $chkItem.find("input");
+                    {
+                        // Does this send a 1 or a "true"? I think it sends a 1 :thinking: IT DOES NOT, IT SENDS "on" WTF LOL i hate javascript
+                        let $item = $(`<p>${label} <input class="float-end" type="checkbox"></p>`);
+                        let $input = $item.find("input");
 
-                    $chkInput.change(function () {
-                        let weaponIndex = $("#weapon").attr("index");
-                        UpdateAttribute(weaponIndex, name, $(this).is(":checked") ? 1 : 0);
-                    });
+                        $input.change(function () {
+                            let weaponIndex = $("#weapon").attr("index");
+                            UpdateAttribute(weaponIndex, name, $(this).is(":checked") ? 1 : 0);
+                        });
 
-                    return $chkItem;
+                        return $item;
+                    }
 
                 case 2:
                     // Float
-                    let $floatItem = $(`<p id='${name}_options'>${label} <input class="float-end" id='${name}' type="number" value="0.0"></p>`);
-                    let $floatInput = $floatItem.find("input");
+                    {
+                        let $item = $(`<p>${label} <input class="float-end" type="number" value="0.0"></p>`);
+                        let $input = $item.find("input");
 
-                    $floatInput.change(function () {
-                        let weaponIndex = $("#weapon").attr("index");
-                        UpdateAttribute(weaponIndex, name, $(this).val());
-                    });
+                        $input.change(function () {
+                            let weaponIndex = $("#weapon").attr("index");
+                            UpdateAttribute(weaponIndex, name, $(this).val());
+                        });
 
-                    return $floatItem;
+                        return $item;
+                    }
 
                 case 3:
                     // Combo
-                    $item = $(`<p>${label} <select class="float-end" id='${name}'></select></p>`);
-                    $list = $item.find("select");
-                    if (name == "paintkit_proto_def_index") {
+                    {
+                        $item = $(`<p>${label} <select class="float-end"></select></p>`);
+                        $list = $item.find("select");
 
-                        for (let key in skinOptions) {
-                            $list.append(`<option value="${key}">${skinOptions[key]}</option>`);
+                        if (name == "paintkit_proto_def_index") {
+                            for (let key in skinOptions) {
+                                $list.append(`<option value="${key}">${skinOptions[key]}</option>`);
+                            }
                         }
-                    }
-                    if (name == "set_attached_particle" || name == "set_attached_particle_static") {
-                        for (let key in unusualOptions) {
-                            $list.append(`<option value="${key}">${unusualOptions[key]}</option>`);
+                        if (name == "set_attached_particle" || name == "set_attached_particle_static") {
+                            for (let key in unusualOptions) {
+                                $list.append(`<option value="${key}">${unusualOptions[key]}</option>`);
+                            }
                         }
-                    }
-                    if (name == "killstreak_idleeffect") {
-                        for (let key in sheenOptions) {
-                            $list.append(`<option value="${key}">${sheenOptions[key]}</option>`);
+                        if (name == "killstreak_idleeffect") {
+                            for (let key in sheenOptions) {
+                                $list.append(`<option value="${key}">${sheenOptions[key]}</option>`);
+                            }
                         }
-                    }
 
-                    $list.change(function () {
-                        let weaponIndex = $("#weapon").attr("index");
-                        UpdateAttribute(weaponIndex, name, $(this).val());
-                    });
+                        $list.change(function () {
+                            let weaponIndex = $("#weapon").attr("index");
+                            UpdateAttribute(weaponIndex, name, $(this).val());
+                        });
 
-                    return $item;
+                        return $item;
+                    }
 
                 default: break;
             }
@@ -1012,8 +1002,29 @@
             });
         }
 
-        // Not setTimeout idiot
-        setInterval(updateWeaponIndex, 1000);
+        // Initialize
+        $(document).ready(function () {
+            // type 0 = int
+            // type 1 = bool
+            // type 2 = float
+            // type 3 = combo (lets do special cases for each type of combo (mainly set_attached_particle and killstreak_idleeffect))
+
+            // Create attribute buttons
+            attributes.append(CreateAttributeButton("Paint kit skin", "paintkit_proto_def_index", 834, 3));
+            attributes.append(CreateAttributeButton("Paint kit wear", "set_item_texture_wear", 725, 2));
+            //attributes.append(button("Paint kit seed (Low bytes)", "custom_paintkit_seed_lo", 866, 0));
+            //attributes.append(button("Paint kit seed (High bytes)", "custom_paintkit_seed_hi", 867, 0));
+            attributes.append(CreateAttributeButton("Paint kit is team coloured", "has_team_color_paintkit", 745, 1));
+            attributes.append(CreateAttributeButton("Unusual effect 1", "set_attached_particle", 134, 3));
+            attributes.append(CreateAttributeButton("Unusual effect 2", "set_attached_particle_static", 370, 3));
+            attributes.append(CreateAttributeButton("Festivized", "is_festivized", 2053, 1));
+            attributes.append(CreateAttributeButton("Australium", "is_australium_item", 2027, 1));
+            attributes.append(CreateAttributeButton("Item style override", "item_style_override", 542, 1));
+            attributes.append(CreateAttributeButton("Killstreak sheen", "killstreak_idleeffect", 2014, 3));
+
+            // Not setTimeout idiot
+            setInterval(updateWeaponIndex, 1000);
+        });
     </script>
 </body>
 
