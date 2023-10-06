@@ -7,13 +7,8 @@
     <title>Skin changer</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
-    <style>
-        p,
-        h1,
-        h2 {
-            color: #fff !important;
-        }
-    </style>
+
+    <!-- Constants -->
     <script>
         const weaponNames = {
             13: "Scattergun",
@@ -523,6 +518,220 @@
             1071: "GoldFryingPan",
             423: "Saxxy",
         };
+
+        const skinOptions = {
+            0: "None",
+            102: "Wrapped Reviver Mk.II",
+            104: "Carpet Bomber Mk.II",
+            105: "Masked Mender Mk.II",
+            106: "Woodland Warrior Mk.II",
+            109: "Forest Fire Mk.II",
+            112: "Backwoods Boomstick Mk.II",
+            113: "Woodsy Widowmaker Mk.II",
+            114: "Night Owl Mk.II",
+            120: "Iron Wood Mk.II",
+            122: "Plaid Potshotter Mk.II",
+            130: "Bovine Blazemaker Mk.II",
+            139: "Civil Servant Mk.II",
+            143: "Smalltown Bringdown Mk.II",
+            144: "Civic Duty Mk.II",
+            151: "Dead Reckoner Mk.II",
+            160: "Autumn Mk.II",
+            161: "Nutcracker Mk.II",
+            163: "Macabre Web Mk.II",
+            200: "Bloom Buffed",
+            201: "Quack Canvassed",
+            202: "Bank Rolled",
+            203: "Merc Stained",
+            204: "Kill Covered",
+            205: "Fire Glazed",
+            206: "Pizza Polished",
+            207: "Bonk Varnished",
+            208: "Star Crossed",
+            209: "Clover Camo'd",
+            210: "Freedom Wrapped",
+            211: "Cardboard Boxed",
+            212: "Dream Piped",
+            213: "Miami Element",
+            214: "Neo Tokyo",
+            215: "Geometrical Teams",
+            217: "Bomber Soul",
+            218: "Uranium",
+            220: "Cabin Fevered",
+            221: "Polar Surprise",
+            223: "Hana",
+            224: "Dovetailed",
+            225: "Cosmic Calamity",
+            226: "Hazard Warning",
+            228: "Mosaic",
+            230: "Jazzy",
+            232: "Alien Tech",
+            234: "Damascus and Mahogany",
+            235: "Skull Study",
+            236: "Haunted Ghosts",
+            237: "Spectral Shimmered",
+            238: "Spirit of Halloween",
+            239: "Horror Holiday",
+            240: "Totally Boned",
+            241: "Electroshocked",
+            242: "Ghost Town",
+            243: "Tumor Toasted",
+            244: "Calavera Canvas",
+            245: "Snow Covered",
+            246: "Frost Ornamented",
+            247: "Smissmas Village",
+            248: "Igloo",
+            249: "Seriously Snowed",
+            250: "Smissmas Camo",
+            251: "Sleighin' Style",
+            252: "Alpine",
+            253: "Gift Wrapped",
+            254: "Winterland Wrapped",
+            255: "Helldriver",
+            256: "Organ-ically Hellraised",
+            257: "Spectrum Splattered",
+            258: "Candy Coated",
+            259: "Pumpkin Pied",
+            260: "Sweet Toothed",
+            261: "Crawlspace Critters",
+            262: "Portal Plastered",
+            263: "Death Deluxe",
+            264: "Raving Dead",
+            265: "Eyestalker",
+            266: "Spider's Cluster",
+            267: "Gourdy Green",
+            268: "Mummified Mimic",
+            269: "Spider Season",
+            270: "Gingerbread Winner",
+            271: "Saccharine Striped",
+            272: "Elfin Enamel",
+            273: "Peppermint Swirl",
+            275: "Snow Globalization",
+            276: "Gifting Mann's Wrapping Paper",
+            277: "Snowflake Swirled",
+            278: "Smissmas Spycrabs",
+            279: "Frozen Aurora",
+            280: "Starlight Serenity",
+            281: "Frosty Delivery",
+            282: "Glacial Glazed",
+            283: "Cookie Fortress",
+            284: "Sarsaparilla Sprayed",
+            285: "Swashbuckled",
+            286: "Skull Cracked",
+            287: "Misfortunate",
+            289: "Neon-ween",
+            290: "Simple Spirits",
+            291: "Broken Bones",
+            292: "Potent Poison",
+            293: "Searing Souls",
+            294: "Party Phantoms",
+            295: "Polter-Guised",
+            296: "Kiln and Conquer",
+            297: "Necromanced",
+            300: "Yeti Coated",
+            301: "Park Pigmented",
+            302: "Mannana Peeled",
+            303: "Macaw Masked",
+            304: "Sax Waxed",
+            305: "Anodized Aloha",
+            306: "Bamboo Brushed",
+            307: "Tiger Buffed",
+            308: "Croc Dusted",
+            309: "Pi�a Polished",
+            310: "Leopard Printed",
+            390: "Dragon Slayer",
+            391: "Smissmas Sweater",
+            400: "Ghoul Blaster",
+            401: "Cream Corned",
+            402: "Sunriser",
+            403: "Sacred Slayer",
+            404: "Metalized Soul",
+            405: "Bonzo Gnawed",
+            406: "Health and Hell",
+            407: "Health and Hell (Green)",
+            408: "Hypergon",
+            409: "Pumpkin Plastered",
+            410: "Chilly Autumn",
+            411: "Steel Brushed",
+            412: "Secretly Serviced",
+            413: "Sky Stallion",
+            414: "Bomb Carrier",
+            415: "Business Class",
+            416: "Deadly Dragon",
+            417: "Team Serviced",
+            418: "Warborn",
+            419: "Pacific Peacemaker",
+            420: "Mechanized Monster"
+        };
+
+        const unusualOptions = {
+            0: "None",
+            4: "Community Sparkle",
+            701: "Hot",
+            702: "Isotope",
+            703: "Cool",
+            704: "Energy Orb",
+        };
+
+        const sheenOptions = {
+            0: "None",
+            1: "Team shine",
+            2: "Deadly daffodil",
+            3: "Manndarin",
+            4: "Mean green",
+            5: "Agonizing emerald",
+            6: "Villainous violet",
+            7: "Hot rod"
+        };
+
+        // TODO: These 3 can be combined into one
+        const attributeNames = {
+            834: "paintkit_proto_def_index",
+            866: "custom_paintkit_seed_lo",
+            867: "custom_paintkit_seed_hi",
+            745: "has_team_color_paintkit",
+            725: "set_item_texture_wear",
+            731: "weapon_allow_inspect",
+            370: "set_attached_particle_static",
+            134: "set_attached_particle",
+            2053: "is_festivized",
+            2027: "is_australium_item",
+            2022: "loot_rarity",
+            542: "item_style_override",
+            2014: "killstreak_idleeffect"
+        };
+
+        const attributeLabels = {
+            834: "Paint kit skin",
+            725: "Paint kit wear",
+            866: "Paint kit seed (Low bytes)",
+            867: "Paint kit seed (High bytes)",
+            745: "Paint kit is team coloured",
+            134: "Unusual effect 1",
+            370: "Unusual effect 2",
+            2053: "Festivized",
+            2027: "Australium",
+            2022: "Loot rarity",
+            542: "Item style override",
+            2014: "Killstreak sheen"
+        };
+
+        const attributeTypes = {
+            834: 3,
+            866: 0,
+            867: 0,
+            745: 1,
+            725: 2,
+            731: 1,
+            370: 3,
+            134: 3,
+            2053: 1,
+            2027: 1,
+            2022: 1,
+            542: 1,
+            2014: 3
+        };
+
     </script>
 </head>
 
@@ -535,8 +744,6 @@
                     <h2>Skinchanger</h2>
                 </div>
             </div>
-
-            <hr />
 
             <!-- Info -->
             <div class="row">
@@ -553,286 +760,28 @@
             </div>
         </div>
 
+        <!-- Editor -->
         <div class="row p-2 border border-primary">
 
             <!-- Possible attributes -->
-            <div class="col-md-4 border-end border-dashed border-primary-subtle">
+            <div class="col-md-3 border-end border-dashed border-primary-subtle">
                 <div class="container">
                     <!-- Title -->
                     <div class="row text-center">
-                        <h3>Possible attributes</h3>
+                        <p class="fs-4">Possible attributes</p>
                     </div>
 
                     <!-- Content -->
                     <div id="possibleAttributes" class="row row-cols-1 gy-1"></div>
                 </div>
-
-                <script>
-                    attributes = $("#possibleAttributes");
-                    button = (label, name, index, type) => {
-                        return `<button class="btn btn-primary" onclick="addAttribute('${label}', '${name}', ${type})">${label}</button>`;
-                    }
-
-                    // type 0 = int
-                    // type 1 = bool
-                    // type 2 = float
-                    // type 3 = combo (lets do special cases for each type of combo (mainly set_attached_particle and killstreak_idleeffect))
-
-                    attributes.append(button("Paint kit skin", "paintkit_proto_def_index", 834, 3));
-                    attributes.append(button("Paint kit wear", "set_item_texture_wear", 725, 2));
-                    //attributes.append(button("Paint kit seed (Low bytes)", "custom_paintkit_seed_lo", 866, 0));
-                    //attributes.append(button("Paint kit seed (High bytes)", "custom_paintkit_seed_hi", 867, 0));
-                    attributes.append(button("Paint kit is team coloured", "has_team_color_paintkit", 745, 1));
-                    attributes.append(button("Unusual effect 1", "set_attached_particle", 134, 3));
-                    attributes.append(button("Unusual effect 2", "set_attached_particle_static", 370, 3));
-                    attributes.append(button("Festivized", "is_festivized", 2053, 1));
-                    attributes.append(button("Australium", "is_australium_item", 2027, 1));
-                    attributes.append(button("Item style override", "item_style_override", 542, 1));
-                    attributes.append(button("Killstreak sheen", "killstreak_idleeffect", 2014, 3));
-
-                    let attributeToName = (attribute) => {
-                        switch (attribute) {
-                            case 834: return "Paint kit skin";
-                            case 725: return "Paint kit wear";
-                            case 866: return "Paint kit seed (Low bytes)";
-                            case 867: return "Paint kit seed (High bytes)";
-                            case 745: return "Paint kit is team coloured";
-                            case 134: return "Unusual effect 1";
-                            case 370: return "Unusual effect 2";
-                            case 2053: return "Festivized";
-                            case 2027: return "Australium";
-                            case 2022: return "Loot rarity";
-                            case 542: return "Item style override";
-                            case 2014: return "Killstreak sheen";
-                            default: return "Unknown";
-                        }
-                    };
-
-                    let skinOptions = {
-                        0: "None",
-                        102: "Wrapped Reviver Mk.II",
-                        104: "Carpet Bomber Mk.II",
-                        105: "Masked Mender Mk.II",
-                        106: "Woodland Warrior Mk.II",
-                        109: "Forest Fire Mk.II",
-                        112: "Backwoods Boomstick Mk.II",
-                        113: "Woodsy Widowmaker Mk.II",
-                        114: "Night Owl Mk.II",
-                        120: "Iron Wood Mk.II",
-                        122: "Plaid Potshotter Mk.II",
-                        130: "Bovine Blazemaker Mk.II",
-                        139: "Civil Servant Mk.II",
-                        143: "Smalltown Bringdown Mk.II",
-                        144: "Civic Duty Mk.II",
-                        151: "Dead Reckoner Mk.II",
-                        160: "Autumn Mk.II",
-                        161: "Nutcracker Mk.II",
-                        163: "Macabre Web Mk.II",
-                        200: "Bloom Buffed",
-                        201: "Quack Canvassed",
-                        202: "Bank Rolled",
-                        203: "Merc Stained",
-                        204: "Kill Covered",
-                        205: "Fire Glazed",
-                        206: "Pizza Polished",
-                        207: "Bonk Varnished",
-                        208: "Star Crossed",
-                        209: "Clover Camo'd",
-                        210: "Freedom Wrapped",
-                        211: "Cardboard Boxed",
-                        212: "Dream Piped",
-                        213: "Miami Element",
-                        214: "Neo Tokyo",
-                        215: "Geometrical Teams",
-                        217: "Bomber Soul",
-                        218: "Uranium",
-                        220: "Cabin Fevered",
-                        221: "Polar Surprise",
-                        223: "Hana",
-                        224: "Dovetailed",
-                        225: "Cosmic Calamity",
-                        226: "Hazard Warning",
-                        228: "Mosaic",
-                        230: "Jazzy",
-                        232: "Alien Tech",
-                        234: "Damascus and Mahogany",
-                        235: "Skull Study",
-                        236: "Haunted Ghosts",
-                        237: "Spectral Shimmered",
-                        238: "Spirit of Halloween",
-                        239: "Horror Holiday",
-                        240: "Totally Boned",
-                        241: "Electroshocked",
-                        242: "Ghost Town",
-                        243: "Tumor Toasted",
-                        244: "Calavera Canvas",
-                        245: "Snow Covered",
-                        246: "Frost Ornamented",
-                        247: "Smissmas Village",
-                        248: "Igloo",
-                        249: "Seriously Snowed",
-                        250: "Smissmas Camo",
-                        251: "Sleighin' Style",
-                        252: "Alpine",
-                        253: "Gift Wrapped",
-                        254: "Winterland Wrapped",
-                        255: "Helldriver",
-                        256: "Organ-ically Hellraised",
-                        257: "Spectrum Splattered",
-                        258: "Candy Coated",
-                        259: "Pumpkin Pied",
-                        260: "Sweet Toothed",
-                        261: "Crawlspace Critters",
-                        262: "Portal Plastered",
-                        263: "Death Deluxe",
-                        264: "Raving Dead",
-                        265: "Eyestalker",
-                        266: "Spider's Cluster",
-                        267: "Gourdy Green",
-                        268: "Mummified Mimic",
-                        269: "Spider Season",
-                        270: "Gingerbread Winner",
-                        271: "Saccharine Striped",
-                        272: "Elfin Enamel",
-                        273: "Peppermint Swirl",
-                        275: "Snow Globalization",
-                        276: "Gifting Mann's Wrapping Paper",
-                        277: "Snowflake Swirled",
-                        278: "Smissmas Spycrabs",
-                        279: "Frozen Aurora",
-                        280: "Starlight Serenity",
-                        281: "Frosty Delivery",
-                        282: "Glacial Glazed",
-                        283: "Cookie Fortress",
-                        284: "Sarsaparilla Sprayed",
-                        285: "Swashbuckled",
-                        286: "Skull Cracked",
-                        287: "Misfortunate",
-                        289: "Neon-ween",
-                        290: "Simple Spirits",
-                        291: "Broken Bones",
-                        292: "Potent Poison",
-                        293: "Searing Souls",
-                        294: "Party Phantoms",
-                        295: "Polter-Guised",
-                        296: "Kiln and Conquer",
-                        297: "Necromanced",
-                        300: "Yeti Coated",
-                        301: "Park Pigmented",
-                        302: "Mannana Peeled",
-                        303: "Macaw Masked",
-                        304: "Sax Waxed",
-                        305: "Anodized Aloha",
-                        306: "Bamboo Brushed",
-                        307: "Tiger Buffed",
-                        308: "Croc Dusted",
-                        309: "Pi�a Polished",
-                        310: "Leopard Printed",
-                        390: "Dragon Slayer",
-                        391: "Smissmas Sweater",
-                        400: "Ghoul Blaster",
-                        401: "Cream Corned",
-                        402: "Sunriser",
-                        403: "Sacred Slayer",
-                        404: "Metalized Soul",
-                        405: "Bonzo Gnawed",
-                        406: "Health and Hell",
-                        407: "Health and Hell (Green)",
-                        408: "Hypergon",
-                        409: "Pumpkin Plastered",
-                        410: "Chilly Autumn",
-                        411: "Steel Brushed",
-                        412: "Secretly Serviced",
-                        413: "Sky Stallion",
-                        414: "Bomb Carrier",
-                        415: "Business Class",
-                        416: "Deadly Dragon",
-                        417: "Team Serviced",
-                        418: "Warborn",
-                        419: "Pacific Peacemaker",
-                        420: "Mechanized Monster"
-                    };
-
-                    let unusualOptions = {
-                        0: "None",
-                        4: "Community Sparkle",
-                        701: "Hot",
-                        702: "Isotope",
-                        703: "Cool",
-                        704: "Energy Orb",
-                    };
-
-                    let sheenOptions = {
-                        0: "None",
-                        1: "Team shine",
-                        2: "Deadly daffodil",
-                        3: "Manndarin",
-                        4: "Mean green",
-                        5: "Agonizing emerald",
-                        6: "Villainous violet",
-                        7: "Hot rod"
-                    };
-
-                    function addAttribute(label, name, type) {
-                        if ($(`#${name}`).length > 0) {
-                            return;
-                        }
-
-                        if ($("#weapon").attr("index") == -1) {
-                            return;
-                        }
-
-                        $("#actualAttributes").append(`<p id='${name}_added'>${label} <button type="button" class="btn btn-danger float-end">-</button></p>`);
-
-                        // add a onclick to the button
-                        $(`#${name}_added button`).click(function () {
-                            removeAttribute(name);
-                        });
-
-                        switch (type) {
-                            case 0:
-                                $("#options").append(`<p id='${name}_options'>${label} <input class="float-end" id='${name}' type="number" value="0"></p>`);
-                                break;
-                            case 1:
-                                // Does this send a 1 or a "true"? I think it sends a 1 :thinking: IT DOES NOT, IT SENDS "on" WTF LOL i hate javascript
-                                $("#options").append(`<p id='${name}_options'>${label} <input class="float-end" id='${name}' type="checkbox"></p>`);
-                                break;
-                            case 2:
-                                $("#options").append(`<p id='${name}_options'>${label} <input class="float-end" id='${name}' type="number" value="0.0"></p>`);
-                                break;
-                            case 3:
-                                $("#options").append(`<p id='${name}_options'>${label} <select class="float-end" id='${name}'></select></p>`);
-                                let selector = $(`#${name}`);
-                                if (name == "paintkit_proto_def_index") {
-
-                                    for (let key in skinOptions) {
-                                        selector.append(`<option value="${key}">${skinOptions[key]}</option>`);
-                                    }
-                                }
-                                if (name == "set_attached_particle" || name == "set_attached_particle_static") {
-                                    for (let key in unusualOptions) {
-                                        selector.append(`<option value="${key}">${unusualOptions[key]}</option>`);
-                                    }
-                                }
-                                if (name == "killstreak_idleeffect") {
-                                    for (let key in sheenOptions) {
-                                        selector.append(`<option value="${key}">${sheenOptions[key]}</option>`);
-                                    }
-                                }
-
-                                break;
-                            default: break;
-                        }
-                    }
-                </script>
             </div>
 
             <!-- Selected attributes-->
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="container">
                     <!-- Title -->
                     <div class="row text-center">
-                        <h3>Selected attributes</h3>
+                        <p class="fs-4">Selected attributes</p>
                     </div>
 
                     <!-- Content -->
@@ -841,16 +790,15 @@
             </div>
 
             <!-- Attribute values -->
-            <div class="col-md-4 border-start border-dashed border-primary-subtle">
+            <div class="col-md-6 border-start border-dashed border-primary-subtle">
                 <div class="container">
                     <!-- Title -->
                     <div class="row text-center">
-                        <h3>Attribute values</h3>
+                        <p class="fs-4">Attribute values</p>
                     </div>
 
-                    <div id="options">
-
-                    </div>
+                    <!-- Content -->
+                    <div id="options"></div>
                 </div>
             </div>
 
@@ -858,6 +806,101 @@
     </div>
 
     <script>
+        const attributes = $("#possibleAttributes");
+
+        // Creates a new "possible attributes" button
+        function CreateAttributeButton(label, attrName, attrIndex, attrType) {
+            let $attrButton = $(`<button class="btn btn-primary"></button>`);
+            $attrButton.text(label);
+
+            $attrButton.click(function () {
+                addAttribute(label, attrName, attrType);
+            });
+
+            return $attrButton;
+        }
+
+        // type 0 = int
+        // type 1 = bool
+        // type 2 = float
+        // type 3 = combo (lets do special cases for each type of combo (mainly set_attached_particle and killstreak_idleeffect))
+
+        // Create attribute buttons
+        attributes.append(CreateAttributeButton("Paint kit skin", "paintkit_proto_def_index", 834, 3));
+        attributes.append(CreateAttributeButton("Paint kit wear", "set_item_texture_wear", 725, 2));
+        //attributes.append(button("Paint kit seed (Low bytes)", "custom_paintkit_seed_lo", 866, 0));
+        //attributes.append(button("Paint kit seed (High bytes)", "custom_paintkit_seed_hi", 867, 0));
+        attributes.append(CreateAttributeButton("Paint kit is team coloured", "has_team_color_paintkit", 745, 1));
+        attributes.append(CreateAttributeButton("Unusual effect 1", "set_attached_particle", 134, 3));
+        attributes.append(CreateAttributeButton("Unusual effect 2", "set_attached_particle_static", 370, 3));
+        attributes.append(CreateAttributeButton("Festivized", "is_festivized", 2053, 1));
+        attributes.append(CreateAttributeButton("Australium", "is_australium_item", 2027, 1));
+        attributes.append(CreateAttributeButton("Item style override", "item_style_override", 542, 1));
+        attributes.append(CreateAttributeButton("Killstreak sheen", "killstreak_idleeffect", 2014, 3));
+
+        function CreateAttributeValue(label, name, type) {
+            switch (type) {
+                case 0:
+                    return $(`<p id='${name}_options'>${label} <input class="float-end" id='${name}' type="number" value="0"></p>`);
+
+                case 1:
+                    // Does this send a 1 or a "true"? I think it sends a 1 :thinking: IT DOES NOT, IT SENDS "on" WTF LOL i hate javascript
+                    return $(`<p id='${name}_options'>${label} <input class="float-end" id='${name}' type="checkbox"></p>`);
+
+                case 2:
+                    return $(`<p id='${name}_options'>${label} <input class="float-end" id='${name}' type="number" value="0.0"></p>`);
+
+                case 3:
+                    $item = $(`<p>${label} <select class="float-end" id='${name}'></select></p>`);
+                    $list = $item.find("select");
+                    if (name == "paintkit_proto_def_index") {
+
+                        for (let key in skinOptions) {
+                            $list.append(`<option value="${key}">${skinOptions[key]}</option>`);
+                        }
+                    }
+                    if (name == "set_attached_particle" || name == "set_attached_particle_static") {
+                        for (let key in unusualOptions) {
+                            $list.append(`<option value="${key}">${unusualOptions[key]}</option>`);
+                        }
+                    }
+                    if (name == "killstreak_idleeffect") {
+                        for (let key in sheenOptions) {
+                            $list.append(`<option value="${key}">${sheenOptions[key]}</option>`);
+                        }
+                    }
+                    return $item;
+
+                default: break;
+            }
+        }
+
+        function addAttribute(label, name, type) {
+            if ($(`#${name}`).length > 0) {
+                return;
+            }
+
+            if ($("#weapon").attr("index") == -1) {
+                return;
+            }
+
+            let $button = $(`<p>${label} <button type="button" class="btn btn-danger float-end">-</button></p>`);
+            $("#actualAttributes").append($button);
+
+            // Add the attribute value
+            console.log(label, name, type)
+            let $valueItem = CreateAttributeValue(label, name, type);
+            $("#options").append($valueItem);
+            console.log($valueItem);
+
+            // add a onclick to the button
+            $button.find("button").click(function () {
+                $button.remove();
+                $valueItem.remove();
+                removeAttribute(name);
+            });
+        }
+
         function save() {
             $.get("/save", function (data) {
             });
@@ -879,9 +922,6 @@
         }
 
         function removeAttribute(name) {
-            $(`#${name}_added`).remove();
-            $(`#${name}_options`).remove();
-
             let index = $("#weapon").attr("index");
             $.get(`/remove?index=${index}&attribute=${name}`);
         }
@@ -915,44 +955,6 @@
                 var original = $("#weapon").attr("index");
                 if (original != data) {
                     $.get("/getForIndex?index=" + data, function (data) {
-                        attributeStrForIndex = (index) => {
-                            switch (index) {
-                                case 834: return "paintkit_proto_def_index";
-                                case 866: return "custom_paintkit_seed_lo";
-                                case 867: return "custom_paintkit_seed_hi";
-                                case 745: return "has_team_color_paintkit";
-                                case 725: return "set_item_texture_wear";
-                                case 731: return "weapon_allow_inspect";
-                                case 370: return "set_attached_particle_static";
-                                case 134: return "set_attached_particle";
-                                case 2053: return "is_festivized";
-                                case 2027: return "is_australium_item";
-                                case 2022: return "loot_rarity";
-                                case 542: return "item_style_override";
-                                case 2014: return "killstreak_idleeffect";
-                            }
-                            return "unknown";
-                        };
-
-                        attributeTypeForIndex = (index) => {
-                            switch (index) {
-                                case 834: return 3;
-                                case 866: return 0;
-                                case 867: return 0;
-                                case 745: return 1;
-                                case 725: return 2;
-                                case 731: return 1;
-                                case 370: return 3;
-                                case 134: return 3;
-                                case 2053: return 1;
-                                case 2027: return 1;
-                                case 2022: return 1;
-                                case 542: return 1;
-                                case 2014: return 3;
-                            }
-                            return 0;
-                        }
-
                         $("#actualAttributes").empty();
                         $("#options").empty();
 
@@ -964,9 +966,9 @@
                         for (let key in data) {
                             let attributeIndex = parseInt(key)
                             let attribute = parseFloat(data[key]);
-                            let name = attributeStrForIndex(attributeIndex);
-                            let label = attributeToName(attributeIndex);
-                            let type = attributeTypeForIndex(attributeIndex);
+                            let name = attributeNames[attributeIndex] ?? "default";
+                            let label = attributeLabels[attributeIndex] ?? "Unknown";
+                            let type = attributeTypes[attributeIndex] ?? 0;
 
                             addAttribute(label, name, type);
                             if (type == 1) {
