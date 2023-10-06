@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{87cc1b6d-257a-4874-b962-e514d3b8b4f0}</ProjectGuid>
+    <RootNamespace>skinchangerStandalone</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;SKINCHANGERSTANDALONE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;SKINCHANGERSTANDALONE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;SKINCHANGERSTANDALONE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;SKINCHANGERSTANDALONE_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableUAC>false</EnableUAC>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\app\App.cpp" />
+    <ClCompile Include="src\app\Hooks\CL_CallPostDataUpdates.cpp" />
+    <ClCompile Include="src\app\SkinChanger\SkinChanger.cpp" />
+    <ClCompile Include="src\app\WebInterface\WebInterface.cpp" />
+    <ClCompile Include="src\dllmain.cpp" />
+    <ClCompile Include="src\sdk\Hooks\Hooks.cpp" />
+    <ClCompile Include="src\sdk\Interfaces\Interfaces.cpp" />
+    <ClCompile Include="src\sdk\Memory\Memory.cpp" />
+    <ClCompile Include="src\sdk\Netvars.cpp" />
+    <ClCompile Include="src\sdk\Signatures\Signatures.cpp" />
+    <ClCompile Include="src\utils\MinHook\src\buffer.c" />
+    <ClCompile Include="src\utils\MinHook\src\hde\hde32.c" />
+    <ClCompile Include="src\utils\MinHook\src\hde\hde64.c" />
+    <ClCompile Include="src\utils\MinHook\src\hook.c" />
+    <ClCompile Include="src\utils\MinHook\src\trampoline.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="src\app\App.h" />
+    <ClInclude Include="src\app\SkinChanger\SkinChanger.h" />
+    <ClInclude Include="src\app\WebInterface\WebInterface.h" />
+    <ClInclude Include="src\sdk\Base.h" />
+    <ClInclude Include="src\sdk\Hooks\Hooks.h" />
+    <ClInclude Include="src\sdk\Interfaces\Interfaces.h" />
+    <ClInclude Include="src\sdk\Maths.h" />
+    <ClInclude Include="src\sdk\Memory\Memory.h" />
+    <ClInclude Include="src\sdk\Netvars.h" />
+    <ClInclude Include="src\sdk\SDK.h" />
+    <ClInclude Include="src\sdk\Signatures\Signatures.h" />
+    <ClInclude Include="src\sdk\TF2\baseclientstate.h" />
+    <ClInclude Include="src\sdk\TF2\basehandle.h" />
+    <ClInclude Include="src\sdk\TF2\basetypes.h" />
+    <ClInclude Include="src\sdk\TF2\bitbuf.h" />
+    <ClInclude Include="src\sdk\TF2\ButtonCode.h" />
+    <ClInclude Include="src\sdk\TF2\cdll_int.h" />
+    <ClInclude Include="src\sdk\TF2\checksum_crc.h" />
+    <ClInclude Include="src\sdk\TF2\client_class.h" />
+    <ClInclude Include="src\sdk\TF2\client_render_handle.h" />
+    <ClInclude Include="src\sdk\TF2\commonmacros.h" />
+    <ClInclude Include="src\sdk\TF2\const.h" />
+    <ClInclude Include="src\sdk\TF2\datamap.h" />
+    <ClInclude Include="src\sdk\TF2\dt_common.h" />
+    <ClInclude Include="src\sdk\TF2\dt_recv.h" />
+    <ClInclude Include="src\sdk\TF2\ehandle.h" />
+    <ClInclude Include="src\sdk\TF2\IAppSystem.h" />
+    <ClInclude Include="src\sdk\TF2\icliententitylist.h" />
+    <ClInclude Include="src\sdk\TF2\iclientnetworkable.h" />
+    <ClInclude Include="src\sdk\TF2\iclientthinkable.h" />
+    <ClInclude Include="src\sdk\TF2\iclientunknown.h" />
+    <ClInclude Include="src\sdk\TF2\ihandleentity.h" />
+    <ClInclude Include="src\sdk\TF2\InputEnums.h" />
+    <ClInclude Include="src\sdk\TF2\interface.h" />
+    <ClInclude Include="src\sdk\TF2\modes.h" />
+    <ClInclude Include="src\sdk\TF2\random.h" />
+    <ClInclude Include="src\sdk\TF2\utlblockmemory.h" />
+    <ClInclude Include="src\sdk\TF2\utlmemory.h" />
+    <ClInclude Include="src\sdk\TF2\utlvector.h" />
+    <ClInclude Include="src\sdk\TF2\vector.h" />
+    <ClInclude Include="src\utils\fnv1a.h" />
+    <ClInclude Include="src\utils\httplib.hpp" />
+    <ClInclude Include="src\utils\json.hpp" />
+    <ClInclude Include="src\utils\MinHook\include\MinHook.h" />
+    <ClInclude Include="src\utils\MinHook\src\buffer.h" />
+    <ClInclude Include="src\utils\MinHook\src\hde\hde32.h" />
+    <ClInclude Include="src\utils\MinHook\src\hde\hde64.h" />
+    <ClInclude Include="src\utils\MinHook\src\hde\pstdint.h" />
+    <ClInclude Include="src\utils\MinHook\src\hde\table32.h" />
+    <ClInclude Include="src\utils\MinHook\src\hde\table64.h" />
+    <ClInclude Include="src\utils\MinHook\src\trampoline.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="skinchangerStandalone.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
