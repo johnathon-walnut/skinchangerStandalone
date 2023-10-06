@@ -725,7 +725,7 @@ void SkinChanger::ApplySkins()
 
 	switch (nWeaponIndex)
 	{
-		Redirect(Misc_t_FryingPan, Misc_t_GoldFryingPan);
+		//Redirect(Misc_t_FryingPan, Misc_t_GoldFryingPan);
 		Redirect(Soldier_m_RocketLauncher, Soldier_m_RocketLauncherR);
 		Redirect(Scout_m_Scattergun, Scout_m_ScattergunR);
 		Redirect(Pyro_m_FlameThrower, Pyro_m_FlameThrowerR);
@@ -738,6 +738,11 @@ void SkinChanger::ApplySkins()
 		Redirect(Sniper_s_SMG, Sniper_s_SMGR);
 		Redirect(Spy_t_Knife, Spy_t_KnifeR);
 		Redirect(Spy_m_Revolver, Spy_m_RevolverR);
+		Redirect(Engi_s_EngineersPistol, Engi_s_PistolR);
+		Redirect(Soldier_s_SoldiersShotgun, Soldier_s_ShotgunR);
+		Redirect(Pyro_s_PyrosShotgun, Pyro_s_ShotgunR);
+		Redirect(Heavy_s_HeavysShotgun, Heavy_s_ShotgunR);
+		Redirect(Engi_m_EngineersShotgun, Engi_m_ShotgunR);
 		default: break;
 	}
 
