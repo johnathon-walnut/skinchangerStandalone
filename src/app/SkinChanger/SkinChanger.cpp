@@ -730,7 +730,7 @@ void SkinChanger::ApplySkins()
 		Redirect(Scout_m_Scattergun, Scout_m_ScattergunR);
 		Redirect(Pyro_m_FlameThrower, Pyro_m_FlameThrowerR);
 		Redirect(Demoman_m_GrenadeLauncher, Demoman_m_GrenadeLauncherR);
-		Redirect(Demoman_s_StickybombLauncher, Demoman_s_StickybombLauncher);
+		Redirect(Demoman_s_StickybombLauncher, Demoman_s_StickybombLauncherR);
 		Redirect(Heavy_m_Minigun, Heavy_m_MinigunR);
 		Redirect(Engi_t_Wrench, Engi_t_WrenchR);
 		Redirect(Medic_s_MediGun, Medic_s_MediGunR);
