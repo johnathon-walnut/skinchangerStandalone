@@ -716,7 +716,7 @@
             <div class="row">
                 <div class="d-flex">
                     <div class="p-2 flex-grow-1">
-                        <h4 id="weapon">Weapon: None</h4>
+                        <h4>Weapon: <span id="weapon">None</span></h4>
                     </div>
 
                     <div class="p-2">
@@ -774,6 +774,7 @@
 
     <script>
         const attributes = $("#possibleAttributes");
+        let weaponIndex = -1;
 
         // Creates a new "possible attributes" button
         function createAttributeButton(label, attrName, attrIndex, attrType) {
@@ -804,7 +805,6 @@
                         let $input = $item.find("input");
 
                         $input.change(function () {
-                            let weaponIndex = $("#weapon").attr("index");
                             updateAttribute(weaponIndex, name, $(this).val());
                         });
 
@@ -819,7 +819,6 @@
                         let $input = $item.find("input");
 
                         $input.change(function () {
-                            let weaponIndex = $("#weapon").attr("index");
                             updateAttribute(weaponIndex, name, $(this).is(":checked") ? 1 : 0);
                         });
 
@@ -833,7 +832,6 @@
                         let $input = $item.find("input");
 
                         $input.change(function () {
-                            let weaponIndex = $("#weapon").attr("index");
                             updateAttribute(weaponIndex, name, $(this).val());
                         });
 
@@ -863,7 +861,6 @@
                         }
 
                         $list.change(function () {
-                            let weaponIndex = $("#weapon").attr("index");
                             updateAttribute(weaponIndex, name, $(this).val());
                         });
 
@@ -879,7 +876,7 @@
                 return;
             }
 
-            if ($("#weapon").attr("index") == -1) {
+            if (weaponIndex == -1) {
                 return;
             }
 
@@ -901,21 +898,21 @@
         }
 
         function removeAttribute(name) {
-            let index = $("#weapon").attr("index");
-            $.get(`/remove?index=${index}&attribute=${name}`);
+            $.get(`/remove?index=${weaponIndex}&attribute=${name}`);
         }
 
         // I did this to myself
         function updateWeaponIndex() {
             $.get("/weaponIndex", function (data) {
-                var original = $("#weapon").attr("index");
-                if (original != data) {
+                // Update the attributes
+                let newIndex = parseInt(data);
+                if (weaponIndex != newIndex) {
                     $.get("/getForIndex?index=" + data, function (data) {
                         $("#actualAttributes").empty();
                         $("#options").empty();
 
                         if (data == null) {
-                            $("#weapon").text(`Weapon: ${data}`);
+                            $("#weapon").text(data);
                             return;
                         }
 
@@ -944,18 +941,12 @@
                     });
                 }
 
-                $("#weapon").attr("index", data);
-                numberData = parseInt(data);
-                if (numberData in weaponNames) {
-                    $("#weapon").text(`Weapon: ${weaponNames[numberData]}`);
+                // Update the weapon name/index
+                weaponIndex = newIndex;
+                if (weaponIndex == -1) {
+                    ("#weapon").text(data);
                 } else {
-                    // if it's -1 set it to "None"
-                    if (data == -1) {
-                        $("#weapon").text(`Weapon: None`);
-                        return;
-                    } else {
-                        $("#weapon").text(`Weapon: ${data}`);
-                    }
+                    $("#weapon").text(weaponNames[newIndex] ?? data);
                 }
             });
         }
@@ -967,7 +958,7 @@
 
         function load() {
             $.get("/load", function (data) {
-                $("#weapon").attr("index", -1);
+                weaponIndex = -1;
                 updateWeaponIndex();
                 // Call the change event on the weapon index to update the attributes
                 let options = $("#options");
