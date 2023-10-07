@@ -684,54 +684,21 @@
             7: "Hot rod"
         };
 
-        // TODO: These 3 can be combined into one
-        const attributeNames = {
-            834: "paintkit_proto_def_index",
-            866: "custom_paintkit_seed_lo",
-            867: "custom_paintkit_seed_hi",
-            745: "has_team_color_paintkit",
-            725: "set_item_texture_wear",
-            731: "weapon_allow_inspect",
-            370: "set_attached_particle_static",
-            134: "set_attached_particle",
-            2053: "is_festivized",
-            2027: "is_australium_item",
-            2022: "loot_rarity",
-            542: "item_style_override",
-            2014: "killstreak_idleeffect"
+        const attributeInfo = {
+            834: { name: "paintkit_proto_def_index", label: "Paint kit skin", type: 3 },
+            866: { name: "custom_paintkit_seed_lo", label: "Paint kit seed (Low bytes)", type: 0 },
+            867: { name: "custom_paintkit_seed_hi", label: "Paint kit seed (High bytes)", type: 0 },
+            745: { name: "has_team_color_paintkit", label: "Paint kit is team coloured", type: 1 },
+            725: { name: "set_item_texture_wear", label: "Paint kit wear", type: 2 },
+            731: { name: "weapon_allow_inspect", label: "Can inspect", type: 1 },
+            370: { name: "set_attached_particle_static", label: "Unusual effect 2", type: 3 },
+            134: { name: "set_attached_particle", label: "Unusual effect 1", type: 3 },
+            2053: { name: "is_festivized", label: "Festivized", type: 1 },
+            2027: { name: "is_australium_item", label: "Australium", type: 1 },
+            2022: { name: "loot_rarity", label: "Loot rarity", type: 1 },
+            542: { name: "item_style_override", label: "Item style override", type: 1 },
+            2014: { name: "killstreak_idleeffect", label: "Killstreak sheen", type: 3 },
         };
-
-        const attributeLabels = {
-            834: "Paint kit skin",
-            725: "Paint kit wear",
-            866: "Paint kit seed (Low bytes)",
-            867: "Paint kit seed (High bytes)",
-            745: "Paint kit is team coloured",
-            134: "Unusual effect 1",
-            370: "Unusual effect 2",
-            2053: "Festivized",
-            2027: "Australium",
-            2022: "Loot rarity",
-            542: "Item style override",
-            2014: "Killstreak sheen"
-        };
-
-        const attributeTypes = {
-            834: 3,
-            866: 0,
-            867: 0,
-            745: 1,
-            725: 2,
-            731: 1,
-            370: 3,
-            134: 3,
-            2053: 1,
-            2027: 1,
-            2022: 1,
-            542: 1,
-            2014: 3
-        };
-
     </script>
 </head>
 
@@ -821,7 +788,11 @@
         }
 
         function updateAttribute(weaponIndex, attrName, value) {
-            $.get(`/update?index=${weaponIndex}&attribute=${attrName}&value=${value}`);
+            $.get("/update", {
+                index: weaponIndex,
+                attribute: attrName,
+                value: value
+            });
         }
 
         function createAttributeValue(label, name, type) {
@@ -932,26 +903,6 @@
             $.get(`/remove?index=${index}&attribute=${name}`);
         }
 
-        function save() {
-            $.get("/save", function (data) {
-            });
-        }
-
-        function load() {
-            $.get("/load", function (data) {
-                $("#weapon").attr("index", -1);
-                updateWeaponIndex();
-                // Call the change event on the weapon index to update the attributes
-                let options = $("#options");
-                // Go through each attribute, and call the change event on it
-                options.children().each(function () {
-                    $(this).children().each(function () {
-                        $(this).change();
-                    });
-                });
-            });
-        }
-
         // I did this to myself
         function updateWeaponIndex() {
             $.get("/weaponIndex", function (data) {
@@ -969,9 +920,10 @@
                         for (let key in data) {
                             let attributeIndex = parseInt(key)
                             let attribute = parseFloat(data[key]);
-                            let name = attributeNames[attributeIndex] ?? "default";
-                            let label = attributeLabels[attributeIndex] ?? "Unknown";
-                            let type = attributeTypes[attributeIndex] ?? 0;
+                            let attrInfo = attributeInfo[attributeIndex] ?? { name: "default", label: "Unknown", type: 0 };
+                            let name = attrInfo.name;
+                            let label = attrInfo.label;
+                            let type = attrInfo.type;
 
                             addAttribute(label, name, type);
                             if (type == 1) {
@@ -1001,6 +953,27 @@
                 }
             });
         }
+
+        function save() {
+            $.get("/save", function (data) {
+            });
+        }
+
+        function load() {
+            $.get("/load", function (data) {
+                $("#weapon").attr("index", -1);
+                updateWeaponIndex();
+                // Call the change event on the weapon index to update the attributes
+                let options = $("#options");
+                // Go through each attribute, and call the change event on it
+                options.children().each(function () {
+                    $(this).children().each(function () {
+                        $(this).change();
+                    });
+                });
+            });
+        }
+
 
         // Initialize
         $(document).ready(function () {
