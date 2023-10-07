@@ -896,6 +896,8 @@
                 $valueItem.remove();
                 removeAttribute(name);
             });
+
+            return $valueItem;
         }
 
         function removeAttribute(name) {
@@ -921,18 +923,22 @@
                             let attributeIndex = parseInt(key)
                             let attribute = parseFloat(data[key]);
                             let attrInfo = attributeInfo[attributeIndex] ?? { name: "default", label: "Unknown", type: 0 };
-                            let name = attrInfo.name;
-                            let label = attrInfo.label;
-                            let type = attrInfo.type;
 
-                            addAttribute(label, name, type);
-                            if (type == 1) {
-                                $(`#${name}`).prop("checked", attribute == 1);
-                            } if (type == 3) {
-                                $(`#${name}`).val(attribute);
-                            }
-                            else {
-                                $(`#${name}`).val(attribute);
+                            $valueItem = addAttribute(attrInfo.label, attrInfo.name, attrInfo.type);
+                            switch (attrInfo.type) {
+                                case 0:
+                                    $valueItem.find("input").val(attribute);
+                                    break;
+                                case 1:
+                                    $valueItem.find("input").prop("checked", attribute == 1);
+                                    break;
+                                case 2:
+                                    $valueItem.find("input").val(attribute);
+                                    break;
+                                case 3:
+                                    $valueItem.find("select").val(attribute);
+                                    break;
+                                default: break;
                             }
                         }
                     });
