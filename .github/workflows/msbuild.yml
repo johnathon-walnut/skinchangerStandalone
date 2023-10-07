@@ -46,4 +46,4 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
        name: skinchangerStandalone
-       path: skinchangerStandalone\Release\skinchangerStandalone.dll    
+       path: D:\a\skinchangerStandalone\skinchangerStandalone\Release\skinchangerStandalone.dll  
