@@ -809,7 +809,7 @@
         const attributes = $("#possibleAttributes");
 
         // Creates a new "possible attributes" button
-        function CreateAttributeButton(label, attrName, attrIndex, attrType) {
+        function createAttributeButton(label, attrName, attrIndex, attrType) {
             let $attrButton = $(`<button class="btn btn-primary"></button>`);
             $attrButton.text(label);
 
@@ -820,11 +820,11 @@
             return $attrButton;
         }
 
-        function UpdateAttribute(weaponIndex, attrName, value) {
+        function updateAttribute(weaponIndex, attrName, value) {
             $.get(`/update?index=${weaponIndex}&attribute=${attrName}&value=${value}`);
         }
 
-        function CreateAttributeValue(label, name, type) {
+        function createAttributeValue(label, name, type) {
             switch (type) {
                 case 0:
                     // Integer
@@ -834,7 +834,7 @@
 
                         $input.change(function () {
                             let weaponIndex = $("#weapon").attr("index");
-                            UpdateAttribute(weaponIndex, name, $(this).val());
+                            updateAttribute(weaponIndex, name, $(this).val());
                         });
 
                         return $item;
@@ -849,7 +849,7 @@
 
                         $input.change(function () {
                             let weaponIndex = $("#weapon").attr("index");
-                            UpdateAttribute(weaponIndex, name, $(this).is(":checked") ? 1 : 0);
+                            updateAttribute(weaponIndex, name, $(this).is(":checked") ? 1 : 0);
                         });
 
                         return $item;
@@ -863,7 +863,7 @@
 
                         $input.change(function () {
                             let weaponIndex = $("#weapon").attr("index");
-                            UpdateAttribute(weaponIndex, name, $(this).val());
+                            updateAttribute(weaponIndex, name, $(this).val());
                         });
 
                         return $item;
@@ -893,7 +893,7 @@
 
                         $list.change(function () {
                             let weaponIndex = $("#weapon").attr("index");
-                            UpdateAttribute(weaponIndex, name, $(this).val());
+                            updateAttribute(weaponIndex, name, $(this).val());
                         });
 
                         return $item;
@@ -916,7 +916,7 @@
             $("#actualAttributes").append($button);
 
             // Add the attribute value
-            let $valueItem = CreateAttributeValue(label, name, type);
+            let $valueItem = createAttributeValue(label, name, type);
             $("#options").append($valueItem);
 
             // add a onclick to the button
@@ -925,6 +925,11 @@
                 $valueItem.remove();
                 removeAttribute(name);
             });
+        }
+
+        function removeAttribute(name) {
+            let index = $("#weapon").attr("index");
+            $.get(`/remove?index=${index}&attribute=${name}`);
         }
 
         function save() {
@@ -945,11 +950,6 @@
                     });
                 });
             });
-        }
-
-        function removeAttribute(name) {
-            let index = $("#weapon").attr("index");
-            $.get(`/remove?index=${index}&attribute=${name}`);
         }
 
         // I did this to myself
@@ -1010,17 +1010,17 @@
             // type 3 = combo (lets do special cases for each type of combo (mainly set_attached_particle and killstreak_idleeffect))
 
             // Create attribute buttons
-            attributes.append(CreateAttributeButton("Paint kit skin", "paintkit_proto_def_index", 834, 3));
-            attributes.append(CreateAttributeButton("Paint kit wear", "set_item_texture_wear", 725, 2));
+            attributes.append(createAttributeButton("Paint kit skin", "paintkit_proto_def_index", 834, 3));
+            attributes.append(createAttributeButton("Paint kit wear", "set_item_texture_wear", 725, 2));
             //attributes.append(button("Paint kit seed (Low bytes)", "custom_paintkit_seed_lo", 866, 0));
             //attributes.append(button("Paint kit seed (High bytes)", "custom_paintkit_seed_hi", 867, 0));
-            attributes.append(CreateAttributeButton("Paint kit is team coloured", "has_team_color_paintkit", 745, 1));
-            attributes.append(CreateAttributeButton("Unusual effect 1", "set_attached_particle", 134, 3));
-            attributes.append(CreateAttributeButton("Unusual effect 2", "set_attached_particle_static", 370, 3));
-            attributes.append(CreateAttributeButton("Festivized", "is_festivized", 2053, 1));
-            attributes.append(CreateAttributeButton("Australium", "is_australium_item", 2027, 1));
-            attributes.append(CreateAttributeButton("Item style override", "item_style_override", 542, 1));
-            attributes.append(CreateAttributeButton("Killstreak sheen", "killstreak_idleeffect", 2014, 3));
+            attributes.append(createAttributeButton("Paint kit is team coloured", "has_team_color_paintkit", 745, 1));
+            attributes.append(createAttributeButton("Unusual effect 1", "set_attached_particle", 134, 3));
+            attributes.append(createAttributeButton("Unusual effect 2", "set_attached_particle_static", 370, 3));
+            attributes.append(createAttributeButton("Festivized", "is_festivized", 2053, 1));
+            attributes.append(createAttributeButton("Australium", "is_australium_item", 2027, 1));
+            attributes.append(createAttributeButton("Item style override", "item_style_override", 542, 1));
+            attributes.append(createAttributeButton("Killstreak sheen", "killstreak_idleeffect", 2014, 3));
 
             // Not setTimeout idiot
             setInterval(updateWeaponIndex, 1000);
