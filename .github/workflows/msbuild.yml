@@ -46,4 +46,4 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
        name: Fedoraware
-       path: $skinchangerStandalone\Release\skinchangerStandalone.dll    
+       path: $kinchangerStandalone\Release\skinchangerStandalone.dll    
