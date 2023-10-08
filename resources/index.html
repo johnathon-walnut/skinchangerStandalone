@@ -684,6 +684,17 @@
             7: "Hot rod"
         };
 
+        const effectOptions = {
+            0: "None",
+            1: "Cerebral Discharge",
+            2: "Fire Horns",
+            3: "Flames",
+            4: "Hypno-Beam",
+            5: "Incinerator",
+            6: "Singularity",
+            7: "Tornado"
+        }
+
         const attributeInfo = {
             834: { name: "paintkit_proto_def_index", label: "Paint kit skin", type: 3 },
             866: { name: "custom_paintkit_seed_lo", label: "Paint kit seed (Low bytes)", type: 0 },
@@ -698,9 +709,12 @@
             2022: { name: "loot_rarity", label: "Loot rarity", type: 1 },
             542: { name: "item_style_override", label: "Item style override", type: 1 },
             2014: { name: "killstreak_idleeffect", label: "Killstreak sheen", type: 3 },
+            2013: { name: "killstreak_effect", label: "Killstreak effect", type: 3 },
             1007: { name: "halloween_pumpkin_explosions", label: "Pumpkin Bombs", type: 1},
             1008: { name: "halloween_green_flames", label: "Halloween Flames", type: 1},
-            1006: { name: "halloween_voice_modulation", label: "Voices from Below", type: 1}
+            1006: { name: "halloween_voice_modulation", label: "Voices from Below", type: 1},
+            364: { name: "add_jingle_to_footsteps", label: "Jingle all the way", type: 1},
+            295: { name: "set_custom_buildmenu", label:"Pipboy build menu", type: 1}
         };
     </script>
 </head>
@@ -862,6 +876,11 @@
                                 $list.append(`<option value="${key}">${sheenOptions[key]}</option>`);
                             }
                         }
+                        if (name == "killstreak_effect") {
+                            for (let key in effectOptions){
+                                $list.append(`<option value="${key}">${effectOptions[key]}</option>`);
+                            }
+                        }
 
                         $list.change(function () {
                             updateAttribute(weaponIndex, name, $(this).val());
@@ -994,6 +1013,7 @@
             attributes.append(createAttributeButton("Australium", "is_australium_item", 2027, 1));
             attributes.append(createAttributeButton("Item style override", "item_style_override", 542, 1));
             attributes.append(createAttributeButton("Killstreak sheen", "killstreak_idleeffect", 2014, 3));
+            attributes.append(createAttributeButton("Killstreak effect", "killstreak_effect", 2013, 3))
             attributes.append(createAttributeButton("Pumpkin Bombs", "halloween_pumpkin_explosions", 1007, 1))
             attributes.append(createAttributeButton("Halloween Flames", "halloween_green_flames", 1008, 1))
             attributes.append(createAttributeButton("Voices from Below", "halloween_voice_modulation", 1006, 1))

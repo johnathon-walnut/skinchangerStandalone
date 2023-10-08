@@ -18,6 +18,7 @@ namespace attributes
 	constexpr uint16_t loot_rarity = 2022;
 	constexpr uint16_t item_style_override = 542;
 	constexpr uint16_t set_turn_to_gold = 150;
+	constexpr uint16_t killstreak_effect = 2013;
 	constexpr uint16_t killstreak_idleeffect = 2014;
 	constexpr uint16_t halloween_pumpkin_explosions = 1007;
 	constexpr uint16_t halloween_green_flames = 1008;
@@ -44,6 +45,7 @@ namespace attributes
 			HashCase(loot_rarity);
 			HashCase(item_style_override);
 			HashCase(set_turn_to_gold);
+			HashCase(killstreak_effect)
 			HashCase(killstreak_idleeffect);
 			HashCase(halloween_pumpkin_explosions);
 			HashCase(halloween_green_flames);
