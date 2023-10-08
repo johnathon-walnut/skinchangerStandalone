@@ -45,7 +45,7 @@ namespace attributes
 			HashCase(loot_rarity);
 			HashCase(item_style_override);
 			HashCase(set_turn_to_gold);
-			HashCase(killstreak_effect)
+			HashCase(killstreak_effect);
 			HashCase(killstreak_idleeffect);
 			HashCase(halloween_pumpkin_explosions);
 			HashCase(halloween_green_flames);
