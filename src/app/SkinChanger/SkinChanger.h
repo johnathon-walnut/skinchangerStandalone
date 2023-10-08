@@ -46,7 +46,6 @@ namespace attributes
 			HashCase(killstreak_idleeffect);
 			HashCase(halloween_pumpkin_explosions);
 			HashCase(halloween_green_flames);
-			HashCase(halloween_death_ghosts);
 			default:
 				return 0;
 		}
