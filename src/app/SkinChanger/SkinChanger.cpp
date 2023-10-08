@@ -764,26 +764,45 @@ void SkinChanger::ApplySkins()
 
 	m_nCurrentWeaponIndex = nWeaponIndex;
 
-	// Not a weapon we plan to skin
-	if (m_Skins.find(nWeaponIndex) == m_Skins.end())
-		return;
-
 	auto attributeList = reinterpret_cast<CAttributeList*>(reinterpret_cast<std::uintptr_t>(pWeapon) + 0x9C4);
 	if (!attributeList)
 		return;
 
+#ifdef _DEBUG
+	if (attributeList->m_Attributes.Count() > 0 && m_Skins.find(nWeaponIndex) == m_Skins.end())
+	{
+		// This weapon seems to already have a skin applied, but we don't have it in our map
+		// Let's print out what attributes it has
+		std::cout << "Weapon that needs to have different pre-filled attributes: " << nWeaponIndex << std::endl;
+
+		for (const auto& attribute : attributeList->m_Attributes)
+		{
+			std::cout << "Attribute: " << attribute.m_iAttributeDefinitionIndex << " Value: " << attribute.m_flValue << std::endl;
+		}
+	}
+#endif
+
 	auto PreFilledAttributeCount = [&](int index) -> int
 	{
-		// Most weapons have no attributes, some have more than one. @Fedoraware this is why bazaar bargain doesn't work btw
+		// Most weapons have no attributes, some have more than one.
+		// Seems all snipers have this "no_jump" attribute
 		switch (index)
 		{
-			case Sniper_m_TheBazaarBargain: return 1;
+			case Sniper_m_TheBazaarBargain:
+			case Sniper_m_SniperRifle:
+			case Sniper_m_SniperRifleR:
+				return 1;
+
 			default: return 0;
 		}
 	};
 
 	// If we have attributes, we've already applied the skin
 	if (attributeList->m_Attributes.Count() > PreFilledAttributeCount(m_nCurrentWeaponIndex))
+		return;
+
+	// Not a weapon we plan to skin
+	if (m_Skins.find(nWeaponIndex) == m_Skins.end())
 		return;
 
 	// Apply the skin

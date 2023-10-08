@@ -21,11 +21,14 @@ public:
 	}
 
 	inline bool ShouldStop()
+#ifndef _DEBUG
+		const
+#endif
 	{
-//#ifdef _DEBUG
-//		if (GetAsyncKeyState(VK_END) & 1)
-//			m_bShouldStop = true;
-//#endif
+#ifdef _DEBUG
+		if (GetAsyncKeyState(VK_END) & 1)
+			m_bShouldStop = true;
+#endif
 		return m_bShouldStop;
 	}
 

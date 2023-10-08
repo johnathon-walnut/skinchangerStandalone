@@ -139,5 +139,8 @@ void WebInterface::Stop()
 	if (m_Server)
 		m_Server->stop();
 
+	if (m_ServerThread && m_ServerThread->joinable())
+		m_ServerThread->join();
+
 	Beep(750, 50);
 }
