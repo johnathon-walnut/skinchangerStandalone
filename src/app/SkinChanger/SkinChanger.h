@@ -21,6 +21,7 @@ namespace attributes
 	constexpr uint16_t killstreak_idleeffect = 2014;
 	constexpr uint16_t halloween_pumpkin_explosions = 1007;
 	constexpr uint16_t halloween_green_flames = 1008;
+	constexpr uint16_t halloween_voice_modulation = 1006;
 
 #define HashCase(str) case FNV1A::HashConst(#str): return str
 
@@ -46,6 +47,7 @@ namespace attributes
 			HashCase(killstreak_idleeffect);
 			HashCase(halloween_pumpkin_explosions);
 			HashCase(halloween_green_flames);
+			HashCase(halloween_voice_modulation);
 			default:
 				return 0;
 		}
