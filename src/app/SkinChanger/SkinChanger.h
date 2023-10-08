@@ -19,6 +19,9 @@ namespace attributes
 	constexpr uint16_t item_style_override = 542;
 	constexpr uint16_t set_turn_to_gold = 150;
 	constexpr uint16_t killstreak_idleeffect = 2014;
+	constexpr uint16_t halloween_pumpkin_explosions = 1007;
+	constexpr uint16_t halloween_green_flames = 1008;
+	constexpr uint16_t halloween_death_ghosts = 1009;
 
 #define HashCase(str) case FNV1A::HashConst(#str): return str
 
@@ -42,6 +45,9 @@ namespace attributes
 			HashCase(item_style_override);
 			HashCase(set_turn_to_gold);
 			HashCase(killstreak_idleeffect);
+			HashCase(halloween_pumpkin_explosions);
+			HashCase(halloween_green_flames);
+			HashCase(halloween_death_ghosts);
 			default:
 				return 0;
 		}
