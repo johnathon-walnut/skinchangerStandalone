@@ -14,11 +14,11 @@ namespace attributes
 	constexpr uint16_t set_attached_particle_static = 370;
 	constexpr uint16_t set_attached_particle = 134;
 	constexpr uint16_t is_festivized = 2053;
-	constexpr uint16_t weapon_uses_stattrak_module = 719;
 	constexpr uint16_t is_australium_item = 2027;
 	constexpr uint16_t loot_rarity = 2022;
 	constexpr uint16_t item_style_override = 542;
-	constexpr uint16_t set_turn_to_gold = 150;
+	constexpr uint16_t killstreak_tier = 2025;
+	constexpr uint16_t killstreak_effect = 2013;
 	constexpr uint16_t killstreak_effect = 2013;
 	constexpr uint16_t killstreak_idleeffect = 2014;
 	constexpr uint16_t halloween_pumpkin_explosions = 1007;
@@ -44,11 +44,11 @@ namespace attributes
 			HashCase(set_attached_particle_static);
 			HashCase(set_attached_particle);
 			HashCase(is_festivized);
-			HashCase(weapon_uses_stattrak_module);
 			HashCase(is_australium_item);
 			HashCase(loot_rarity);
 			HashCase(item_style_override);
 			HashCase(set_turn_to_gold);
+			HashCase(killstreak_tier);
 			HashCase(killstreak_effect);
 			HashCase(killstreak_idleeffect);
 			HashCase(halloween_pumpkin_explosions);

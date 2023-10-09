@@ -673,6 +673,13 @@
             704: "Energy Orb",
         };
 
+        const tierOptions = {
+            0: "None",
+            1: "Basic",
+            2: "Specialized",
+            3: "Professional"
+        }
+
         const sheenOptions = {
             0: "None",
             1: "Team shine",
@@ -705,10 +712,10 @@
             370: { name: "set_attached_particle_static", label: "Unusual effect 2", type: 3 },
             134: { name: "set_attached_particle", label: "Unusual effect 1", type: 3 },
             2053: { name: "is_festivized", label: "Festivized", type: 1 },
-            719: { name: "weapon_uses_stattrak_module", label: "Festivized", type: 1 },
             2027: { name: "is_australium_item", label: "Australium", type: 1 },
             2022: { name: "loot_rarity", label: "Loot rarity", type: 1 },
             542: { name: "item_style_override", label: "Item style override", type: 1 },
+            2025: { name: "killstreak_tier", label: "Killstreak tier", type: 3 },
             2014: { name: "killstreak_idleeffect", label: "Killstreak sheen", type: 3 },
             2013: { name: "killstreak_effect", label: "Killstreak effect", type: 3 },
             1007: { name: "halloween_pumpkin_explosions", label: "Pumpkin Bombs", type: 1},
@@ -872,6 +879,11 @@
                                 $list.append(`<option value="${key}">${unusualOptions[key]}</option>`);
                             }
                         }
+                        if (name == "killstreak_tier") {
+                            for (let key in tierOptions) {
+                                $list.append(`<option value="${key}">${tierOptions[key]}</option>`);
+                            }
+                        }
                         if (name == "killstreak_idleeffect") {
                             for (let key in sheenOptions) {
                                 $list.append(`<option value="${key}">${sheenOptions[key]}</option>`);
@@ -1011,8 +1023,8 @@
             attributes.append(createAttributeButton("Unusual effect 1", "set_attached_particle", 134, 3));
             attributes.append(createAttributeButton("Unusual effect 2", "set_attached_particle_static", 370, 3));
             attributes.append(createAttributeButton("Festivized", "is_festivized", 2053, 1));
-            attributes.append(createAttributeButton("Stat Clock", "weapon_uses_stattrak_module", 719, 1));
             attributes.append(createAttributeButton("Australium", "is_australium_item", 2027, 1));
+            attributes.append(createAttributeButton("Killstreak Tier", "killstreak_tier", 2025, 3)); // I assume that 1=basic, 2=specialized, and 3=professional, although it could be a bool
             attributes.append(createAttributeButton("Item style override", "item_style_override", 542, 1));
             attributes.append(createAttributeButton("Killstreak sheen", "killstreak_idleeffect", 2014, 3));
             attributes.append(createAttributeButton("Killstreak effect", "killstreak_effect", 2013, 3));
