@@ -705,6 +705,7 @@
             370: { name: "set_attached_particle_static", label: "Unusual effect 2", type: 3 },
             134: { name: "set_attached_particle", label: "Unusual effect 1", type: 3 },
             2053: { name: "is_festivized", label: "Festivized", type: 1 },
+            719: { name: "weapon_uses_stattrak_module", label: "Festivized", type: 1 },
             2027: { name: "is_australium_item", label: "Australium", type: 1 },
             2022: { name: "loot_rarity", label: "Loot rarity", type: 1 },
             542: { name: "item_style_override", label: "Item style override", type: 1 },
@@ -1010,15 +1011,16 @@
             attributes.append(createAttributeButton("Unusual effect 1", "set_attached_particle", 134, 3));
             attributes.append(createAttributeButton("Unusual effect 2", "set_attached_particle_static", 370, 3));
             attributes.append(createAttributeButton("Festivized", "is_festivized", 2053, 1));
+            attributes.append(createAttributeButton("Stat Clock", "weapon_uses_stattrak_module", 719, 1));
             attributes.append(createAttributeButton("Australium", "is_australium_item", 2027, 1));
             attributes.append(createAttributeButton("Item style override", "item_style_override", 542, 1));
             attributes.append(createAttributeButton("Killstreak sheen", "killstreak_idleeffect", 2014, 3));
-            attributes.append(createAttributeButton("Killstreak effect", "killstreak_effect", 2013, 3))
-            attributes.append(createAttributeButton("Pumpkin Bombs", "halloween_pumpkin_explosions", 1007, 1))
+            attributes.append(createAttributeButton("Killstreak effect", "killstreak_effect", 2013, 3));
+            attributes.append(createAttributeButton("Pumpkin Bombs", "halloween_pumpkin_explosions", 1007, 1));
             attributes.append(createAttributeButton("Halloween Flames", "halloween_green_flames", 1008, 1))
-            attributes.append(createAttributeButton("Voices from Below", "halloween_voice_modulation", 1006, 1))
-            attributes.append(createAttributeButton("Jingle all the way", "add_jingle_to_footsteps", 364, 1))
-            attributes.append(createAttributeButton("Pip-Boy Build Menu", "set_custom_buildmenu", 295, 1))
+            attributes.append(createAttributeButton("Voices from Below", "halloween_voice_modulation", 1006, 1));
+            attributes.append(createAttributeButton("Jingle all the way", "add_jingle_to_footsteps", 364, 1));
+            attributes.append(createAttributeButton("Pip-Boy Build Menu", "set_custom_buildmenu", 295, 1));
 
             // Not setTimeout idiot
             setInterval(updateWeaponIndex, 1000);
