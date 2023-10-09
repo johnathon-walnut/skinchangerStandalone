@@ -19,7 +19,6 @@ namespace attributes
 	constexpr uint16_t item_style_override = 542;
 	constexpr uint16_t killstreak_tier = 2025;
 	constexpr uint16_t killstreak_effect = 2013;
-	constexpr uint16_t killstreak_effect = 2013;
 	constexpr uint16_t killstreak_idleeffect = 2014;
 	constexpr uint16_t halloween_pumpkin_explosions = 1007;
 	constexpr uint16_t halloween_green_flames = 1008;
