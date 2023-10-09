@@ -17,6 +17,7 @@ namespace attributes
 	constexpr uint16_t is_australium_item = 2027;
 	constexpr uint16_t loot_rarity = 2022;
 	constexpr uint16_t item_style_override = 542;
+	constexpr uint16_t set_turn_to_gold = 150;
 	constexpr uint16_t killstreak_tier = 2025;
 	constexpr uint16_t killstreak_effect = 2013;
 	constexpr uint16_t killstreak_idleeffect = 2014;
