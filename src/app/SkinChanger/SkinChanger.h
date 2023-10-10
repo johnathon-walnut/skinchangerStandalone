@@ -18,9 +18,14 @@ namespace attributes
 	constexpr uint16_t loot_rarity = 2022;
 	constexpr uint16_t item_style_override = 542;
 	constexpr uint16_t set_turn_to_gold = 150;
+	constexpr uint16_t killstreak_tier = 2025;
+	constexpr uint16_t killstreak_effect = 2013;
 	constexpr uint16_t killstreak_idleeffect = 2014;
 	constexpr uint16_t halloween_pumpkin_explosions = 1007;
 	constexpr uint16_t halloween_green_flames = 1008;
+	constexpr uint16_t halloween_voice_modulation = 1006;
+	constexpr uint16_t add_jingle_to_footsteps = 364;
+	constexpr uint16_t set_custom_buildmenu = 295;
 
 #define HashCase(str) case FNV1A::HashConst(#str): return str
 
@@ -43,9 +48,14 @@ namespace attributes
 			HashCase(loot_rarity);
 			HashCase(item_style_override);
 			HashCase(set_turn_to_gold);
+			HashCase(killstreak_tier);
+			HashCase(killstreak_effect);
 			HashCase(killstreak_idleeffect);
 			HashCase(halloween_pumpkin_explosions);
 			HashCase(halloween_green_flames);
+			HashCase(halloween_voice_modulation);
+			HashCase(add_jingle_to_footsteps);
+			HashCase(set_custom_buildmenu);
 			default:
 				return 0;
 		}
