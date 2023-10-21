@@ -197,6 +197,7 @@
     <ClInclude Include="src\sdk\TF2\random.h" />
     <ClInclude Include="src\sdk\TF2\utlblockmemory.h" />
     <ClInclude Include="src\sdk\TF2\utlmemory.h" />
+    <ClInclude Include="src\sdk\TF2\UtlSortVector.h" />
     <ClInclude Include="src\sdk\TF2\utlvector.h" />
     <ClInclude Include="src\sdk\TF2\vector.h" />
     <ClInclude Include="src\utils\fnv1a.h" />

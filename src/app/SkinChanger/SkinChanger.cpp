@@ -681,52 +681,10 @@ public:
 	}
 };
 
-class Weapon;
-
-#define NETVAR(_name, type, table, name) inline type &_name() \
-{ \
-	static int offset = g_Netvars.GetNetvar(table, name); \
-	return *reinterpret_cast<type *>(reinterpret_cast<DWORD>(this) + offset); \
-}
-
-#define NETVAR_OFFSET(_name, type, name, offset) inline type &_name() \
-{ \
-	return *reinterpret_cast<type *>(reinterpret_cast<DWORD>(this) + offset); \
-}
-
-class Player
-{
-public:
-	NETVAR(m_hActiveWeapon, CHandle<Weapon>, "CBaseCombatCharacter", "m_hActiveWeapon");
-};
-
-class Weapon
-{
-public:
-	// For wahtever reason CEconEntity -> m_iItemDefinitionIndex only has an offset of like 0x24 bytes
-	NETVAR_OFFSET(m_iItemDefinitionIndex, int, "m_iItemDefinitionIndex", 2364);
-};
-
 #define Redirect(from, to) case from: { nWeaponIndex = to; break; }
 
-void SkinChanger::ApplySkins()
+void SkinChanger::RedirectIndex(int& nWeaponIndex)
 {
-	if (!m_bInitialSkinLoad)
-	{
-		Load();
-		m_bInitialSkinLoad = true;
-	}
-
-	auto pLocal = (Player*)I::EntityList->GetClientEntity(I::EngineClient->GetLocalPlayer());
-	if (!pLocal)
-		return;
-
-	auto pWeapon = pLocal->m_hActiveWeapon().Get();
-	if (!pWeapon)
-		return;
-
-	int& nWeaponIndex = pWeapon->m_iItemDefinitionIndex();
-
 	switch (nWeaponIndex)
 	{
 		//Redirect(Misc_t_FryingPan, Misc_t_GoldFryingPan);
@@ -755,14 +713,15 @@ void SkinChanger::ApplySkins()
 		Redirect(Sniper_t_Kukri, Sniper_t_KukriR);
 		default: break;
 	}
+}
 
-	if (m_bForceFullUpdate)
-	{
-		I::ClientState->ForceFullUpdate();
-		m_bForceFullUpdate = false;
-	}
+void SkinChanger::ApplySkin(Weapon* pWeapon)
+{
+	if (!pWeapon)
+		return;
 
-	m_nCurrentWeaponIndex = nWeaponIndex;
+	int& nWeaponIndex = pWeapon->m_iItemDefinitionIndex();
+	RedirectIndex(nWeaponIndex);
 
 	auto attributeList = reinterpret_cast<CAttributeList*>(reinterpret_cast<std::uintptr_t>(pWeapon) + 0x9C4);
 	if (!attributeList)
@@ -812,6 +771,44 @@ void SkinChanger::ApplySkins()
 
 	for (const auto& attribute : vecAttributes)
 		attributeList->SetAttribute(attribute.attributeIndex, attribute.attributeValue);
+}
+
+void SkinChanger::ApplySkins()
+{
+	if (!m_bInitialSkinLoad)
+	{
+		Load();
+		m_bInitialSkinLoad = true;
+	}
+
+	auto pLocal = (Player*)I::EntityList->GetClientEntity(I::EngineClient->GetLocalPlayer());
+	if (!pLocal)
+		return;
+
+	auto pWeapon = pLocal->m_hActiveWeapon().Get();
+	if (m_bForceFullUpdate)
+	{
+		I::ClientState->ForceFullUpdate();
+		m_bForceFullUpdate = false;
+	}
+
+	if (!pWeapon)
+		return;
+
+	int& nWeaponIndex = pWeapon->m_iItemDefinitionIndex();
+	RedirectIndex(nWeaponIndex);
+
+	m_nCurrentWeaponIndex = nWeaponIndex;
+
+	auto m_hMyWeapons = pLocal->m_hMyWeapons();
+	for (int i = 0; m_hMyWeapons[i].IsValid(); i++)
+	{
+		auto pWeapon = m_hMyWeapons[i].Get();
+		if (!pWeapon)
+			continue;
+
+		ApplySkin(pWeapon);
+	}
 }
 
 void SkinChanger::SetAttribute(int index, std::string attributeStr, float value)

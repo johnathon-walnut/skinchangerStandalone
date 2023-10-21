@@ -91,6 +91,37 @@ struct SkinInfo
 	std::vector<Attribute> m_Attributes;
 };
 
+class Weapon;
+
+#define NETVAR(_name, type, table, name) inline type &_name() \
+{ \
+	static int offset = g_Netvars.GetNetvar(table, name); \
+	return *reinterpret_cast<type *>(reinterpret_cast<DWORD>(this) + offset); \
+}
+
+#define NETVAR_OFFSET(_name, type, name, offset) inline type &_name() \
+{ \
+	return *reinterpret_cast<type *>(reinterpret_cast<DWORD>(this) + offset); \
+}
+
+#define MAX_WEAPONS 48
+
+using MyWeapons = std::array<CHandle<Weapon>, MAX_WEAPONS>;
+
+class Player
+{
+public:
+	NETVAR(m_hActiveWeapon, CHandle<Weapon>, "CBaseCombatCharacter", "m_hActiveWeapon");
+	NETVAR(m_hMyWeapons, MyWeapons, "CBaseCombatCharacter", "m_hMyWeapons");
+};
+
+class Weapon
+{
+public:
+	// For wahtever reason CEconEntity -> m_iItemDefinitionIndex only has an offset of like 0x24 bytes
+	NETVAR_OFFSET(m_iItemDefinitionIndex, int, "m_iItemDefinitionIndex", 2364);
+};
+
 class SkinChanger
 {
 	std::unordered_map<int, SkinInfo> m_Skins;
@@ -99,6 +130,8 @@ class SkinChanger
 	bool m_bInitialSkinLoad = false;
 
 public:
+	void RedirectIndex(int& weaponIndex);
+	void ApplySkin(Weapon* pWeapon);
 	void ApplySkins();
 
 	int GetWeaponIndex() const { return m_nCurrentWeaponIndex; }
