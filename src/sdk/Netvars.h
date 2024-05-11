@@ -6,8 +6,10 @@
 class Netvars
 {
 public:
-	std::uintptr_t GetOffset(RecvTable* pTable, const char* szPropName);
-	std::uintptr_t GetNetvar(const char* szTableName, const char* szPropName);
+	std::size_t GetOffset(RecvTable* pTable, const char* szPropName);
+	std::size_t GetNetvar(const char* szTableName, const char* szPropName);
+
+	void DumpTables();
 };
 
 inline Netvars g_Netvars;

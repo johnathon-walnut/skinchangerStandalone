@@ -1,57 +1,86 @@
 #include "Memory.h"
 
 #include <Windows.h>
+#include <vector>
+#include <Psapi.h>
 
-#define INRANGE(x, a, b) (x >= a && x <= b) 
-#define GetBits(x) (INRANGE((x & (~0x20)),'A','F') ? ((x & (~0x20)) - 'A' + 0xA) : (INRANGE(x,'0','9') ? x - '0' : 0))
-#define GetBytes(x) (GetBits(x[0]) << 4 | GetBits(x[1]))
-
-DWORD FindSignatureInternal(const DWORD& dwAddress, const DWORD& dwLength, const char* szPattern)
+std::uintptr_t Memory::FindSignature(const std::string_view moduleName, const std::string_view pattern)
 {
-	auto szPat = szPattern;
-	DWORD dwFirstMatch = 0x0;
+	auto patternToBytes = [](std::string_view pattern) -> std::vector<int>
+		{
+			std::vector<int> bytes;
 
-	for (auto dwCurrent = dwAddress; dwCurrent < dwLength; dwCurrent++)
+			char* const start{ const_cast<char*>(pattern.data()) };
+			char* const end{ start + std::strlen(pattern.data()) };
+
+			for (char* current{ start }; current < end; ++current)
+			{
+				if (*current == '?')
+				{
+					++current;
+
+					if (*current == '?')
+					{
+						++current;
+					}
+
+					bytes.push_back(-1);
+				}
+				else
+				{
+					bytes.push_back(std::strtoul(current, &current, 16));
+				}
+			}
+
+			return bytes;
+		};
+
+	const auto module{ GetModuleHandleA(moduleName.data()) };
+
+	if (!module)
 	{
-		if (!*szPat)
+		return 0;
+	}
+
+	MODULEINFO moduleInfo;
+
+	if (!K32GetModuleInformation(GetCurrentProcess(), module, &moduleInfo, sizeof(moduleInfo)))
+	{
+		return 0;
+	}
+
+	const auto imageSize{ moduleInfo.SizeOfImage };
+
+	if (!imageSize)
+	{
+		return 0;
+	}
+
+	const auto patternBytes{ patternToBytes(pattern) };
+	const byte* const scanStart{ reinterpret_cast<byte*>(module) };
+	const std::size_t patternSize{ patternBytes.size() };
+	const int* patternBytesData{ patternBytes.data() };
+
+	for (std::size_t i{}; i < imageSize - patternSize; ++i)
+	{
+		bool found{ true };
+
+		for (std::size_t j{}; j < patternSize; ++j)
 		{
-			return dwFirstMatch;
+			if (scanStart[i + j] != patternBytesData[j] && patternBytesData[j] != -1)
+			{
+				found = false;
+				break;
+			}
 		}
 
-		const auto pCurrentByte = *(BYTE*)dwCurrent;
-		const auto pBytePattern = *(BYTE*)szPat;
-
-		if (pBytePattern == '\?' || pCurrentByte == GetBytes(szPat))
+		if (found)
 		{
-			if (!dwFirstMatch)
-				dwFirstMatch = dwCurrent;
-
-			if (!szPat[2])
-				return dwFirstMatch;
-
-			szPat += (pBytePattern == '\?\?' || pBytePattern != '\?') ? 3 : 2;
-		}
-		else
-		{
-			szPat = szPattern;
-			dwFirstMatch = 0x0;
+			return reinterpret_cast<std::uintptr_t>(&scanStart[i]);
 		}
 	}
 
-	return 0x0;
-}
-
-std::uintptr_t Memory::FindSignature(const char* szModule, const char* szSignature)
-{
-	const auto dwModuleHandle = reinterpret_cast<DWORD>(GetModuleHandleA(szModule));
-	if (!dwModuleHandle)
-		return 0x0;
-
-	const auto pNtHeaders = reinterpret_cast<PIMAGE_NT_HEADERS>(dwModuleHandle + reinterpret_cast<PIMAGE_DOS_HEADER>(dwModuleHandle)->e_lfanew);
-	if (!pNtHeaders)
-		return 0x0;
-
-	return FindSignatureInternal(dwModuleHandle + pNtHeaders->OptionalHeader.BaseOfCode, dwModuleHandle + pNtHeaders->OptionalHeader.SizeOfCode, szSignature);
+	return 0;
 }
 
 using InstantiateInterfaceFn = void* (__cdecl*)();
@@ -65,28 +94,27 @@ struct InterfaceReg
 
 void* Memory::FindInterface(const char* szModule, const char* szVersion)
 {
-	const auto moduleHandle = GetModuleHandleA(szModule);
-	if (!moduleHandle)
-		return 0x0;
-
-	auto dwCreateInterface = reinterpret_cast<DWORD>(GetProcAddress(moduleHandle, "CreateInterface"));
-	if (!dwCreateInterface)
-		return 0x0;
-
-	auto pList = **reinterpret_cast<InterfaceReg***>((dwCreateInterface + 0x5 + *reinterpret_cast<DWORD*>(dwCreateInterface + 0x5)) + 0x4 + 0x6);
-	if (!pList)
-		return 0x0;
-
-	while (pList != nullptr)
+	const auto module{ GetModuleHandleA(szModule) };
+	if (!module)
 	{
-		if (strstr(pList->m_pszInterfaceName, szVersion) &&
-			(strlen(pList->m_pszInterfaceName) - strlen(szVersion)) < 5)
-		{
-			return pList->m_pInterface();
-		}
-
-		pList = pList->m_pNextInterface;
+		return 0;
 	}
 
-	return 0x0;
+	using CreateInterfaceFn = void* (*)(const char* name, int* returnCode);
+
+	const auto createInterface{ reinterpret_cast<CreateInterfaceFn>(GetProcAddress(module, "CreateInterface")) };
+	if (!createInterface)
+	{
+		return 0;
+	}
+
+	for (int i = 0; i < 100; i++)
+	{
+		if (const auto iface{ createInterface(szVersion, nullptr) })
+		{
+			return iface;
+		}
+	}
+
+	return 0;
 }

@@ -625,24 +625,40 @@ enum ETFWeapons
 	Misc_t_Saxxy = 423,
 };
 
-//SIGNATURE(C_EconEntity_OnDataChanged, "client.dll", "55 8B EC 83 EC ? 53 56 8B 75 ? 8B D9 89 5D ? 85 F6 75 ? 8D 4B");
-//SIGNATURE(ISchemaAttributeType_OnIterateAttributeValue, "client.dll", "55 8B EC 8B 4D ? 8B 45 ? 8B 11 FF 30 FF 75 ? 8B 42 ? FF D0 5D C2 ? ? CC CC CC CC CC CC CC 55 8B EC 8B 4D ? 8B 45 ? 51", 0);
-//SIGNATURE(GetPaintKitMaterialOverride, "client.dll", "55 8B EC 83 EC ? 56 8B 75 ? 8D 45 ? 57 50");
-//SIGNATURE(CTFItemDefinition_GetValidPaintKits, "client.dll", "55 8B EC 83 EC ? 53 8B D9 56 57 89 5D ? 80 BB ? ? ? ? ? 0F 85 ? ? ? ? C6 83");
-//SIGNATURE(ItemSystem, "client.dll", "A1 ? ? ? ? 85 C0 75 ? 56");
+#ifndef _WIN64
 SIGNATURE(GetItemSchema, "client.dll", "E8 ? ? ? ? 83 C0 ? C3 CC");
 SIGNATURE(CEconItemSchema_GetAttributeDefinition, "client.dll", "55 8B EC 83 EC ? 53 56 8B D9 8D 4D ? 57 E8 ? ? ? ? 8B 45");
 SIGNATURE(CAttributeList_SetRuntimeAttributeValue, "client.dll", "55 8B EC 83 EC ? 33 C0 53 8B D9 56 57 8B 7D");
+#else
+SIGNATURE(GetItemSchema, "client.dll", "48 83 EC ? E8 ? ? ? ? 48 83 C0 ? 48 83 C4 ? C3 CC CC CC");
+SIGNATURE(CEconItemSchema_GetAttributeDefinition, "client.dll", "89 54 24 ? 53 48 83 EC ? 48 8B D9 48 8D 54 24 ? 48 81 C1 ? ? ? ? E8 ? ? ? ? 8B D0 3B 83 ? ? ? ? 73 ? 8B 83 ? ? ? ? 83 F8 ? 74 ? 3B D0 7F ? 48 81 C3 ? ? ? ? 44 8B C2 83 FA ? 74 ? 48 8B 03 8B CA");
+SIGNATURE(CAttributeList_SetRuntimeAttributeValue, "client.dll", "48 89 5C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 55 48 8B EC 48 83 EC ? 44 8B 49");
+#endif
 
-class CAttribute
+/*
+m_iAttributeDefinitionIndex = 0x8
+m_iRawValue32 = 0x12
+m_flValue = 0x12
+m_nRefundableCurrency = 0x16
+*/
+
+class CEconItemAttribute
 {
 public:
 	void* pad = 0;
+#ifndef _WIN64
 	uint16_t m_iAttributeDefinitionIndex;
-	float m_flValue;
-	unsigned int pad2 = 0;
+#else
+	unsigned int m_iAttributeDefinitionIndex;
+#endif
+	union
+	{
+		int m_iRawValue32;
+		float m_flValue;
+	};
+	int m_nRefundableCurrency = 0;
 
-	inline CAttribute(uint16_t iAttributeDefinitionIndex, float flValue)
+	inline CEconItemAttribute(uint16_t iAttributeDefinitionIndex, float flValue)
 	{
 		m_iAttributeDefinitionIndex = iAttributeDefinitionIndex;
 		m_flValue = flValue;
@@ -653,21 +669,28 @@ class CAttributeList
 {
 public:
 	void* pad;
-	CUtlVector<CAttribute, CUtlMemory<CAttribute>> m_Attributes;
+	CUtlVector<CEconItemAttribute, CUtlMemory<CEconItemAttribute>> m_Attributes;
+	void* m_pManager;
 
 	inline void AddAttribute(int iIndex, float flValue)
 	{
 		if (m_Attributes.Count() > 14)
 			return;
 
-		CAttribute attr(iIndex, flValue);
+		CEconItemAttribute attr(iIndex, flValue);
 
 		m_Attributes.AddToTail(attr);
 	}
 
+#ifndef _WIN64
 	using GetItemSchemaFN = void* (__cdecl*)();
 	using GetAttributeDefinitionFN = void* (__thiscall*)(void*, int);
 	using SetRuntimeAttributeValueFN = void(__thiscall*)(CAttributeList*, void*, float);
+#else
+	using GetItemSchemaFN = void* (__fastcall*)();
+	using GetAttributeDefinitionFN = void* (__fastcall*)(void*, int);
+	using SetRuntimeAttributeValueFN = void(__fastcall*)(CAttributeList*, void*, float);
+#endif
 
 	void SetAttribute(int index, float value)
 	{
@@ -723,12 +746,16 @@ void SkinChanger::ApplySkin(Weapon* pWeapon)
 	int& nWeaponIndex = pWeapon->m_iItemDefinitionIndex();
 	RedirectIndex(nWeaponIndex);
 
+#ifndef _WIN64
 	auto attributeList = reinterpret_cast<CAttributeList*>(reinterpret_cast<std::uintptr_t>(pWeapon) + 0x9C4);
+#else
+	auto attributeList = reinterpret_cast<CAttributeList*>(reinterpret_cast<std::uintptr_t>(pWeapon) + 3512);
+#endif
 	if (!attributeList)
 		return;
 
 #ifdef _DEBUG
-	if (attributeList->m_Attributes.Count() > 0 && m_Skins.find(nWeaponIndex) == m_Skins.end())
+		if (attributeList->m_Attributes.Count() > 0 && m_Skins.find(nWeaponIndex) == m_Skins.end())
 	{
 		// This weapon seems to already have a skin applied, but we don't have it in our map
 		// Let's print out what attributes it has
@@ -742,29 +769,29 @@ void SkinChanger::ApplySkin(Weapon* pWeapon)
 #endif
 
 	auto PreFilledAttributeCount = [&](int index) -> int
-	{
-		// Most weapons have no attributes, some have more than one.
-		// Seems all snipers have this "no_jump" attribute
-		switch (index)
 		{
-			case Sniper_m_TheBazaarBargain:
-			case Sniper_m_SniperRifle:
-			case Sniper_m_SniperRifleR:
-				return 1;
+			// Most weapons have no attributes, some have more than one.
+			// Seems all snipers have this "no_jump" attribute
+			switch (index)
+			{
+				case Sniper_m_TheBazaarBargain:
+				case Sniper_m_SniperRifle:
+				case Sniper_m_SniperRifleR:
+					return 1;
 
-			default: return 0;
-		}
-	};
+				default: return 0;
+			}
+		};
 
-	// If we have attributes, we've already applied the skin
+		// If we have attributes, we've already applied all the attributes we want
 	if (attributeList->m_Attributes.Count() > PreFilledAttributeCount(m_nCurrentWeaponIndex))
 		return;
 
-	// Not a weapon we plan to skin
+	// Not a weapon we plan to add attributes to
 	if (m_Skins.find(nWeaponIndex) == m_Skins.end())
 		return;
 
-	// Apply the skin
+	// Apply the attributes if we have requested attributes for it
 	const auto& vecAttributes = m_Skins[nWeaponIndex].m_Attributes;
 	if (vecAttributes.empty())
 		return;
@@ -800,7 +827,7 @@ void SkinChanger::ApplySkins()
 
 	m_nCurrentWeaponIndex = nWeaponIndex;
 
-	auto m_hMyWeapons = pLocal->m_hMyWeapons();
+	const auto& m_hMyWeapons = pLocal->m_hMyWeapons();
 	for (int i = 0; m_hMyWeapons[i].IsValid(); i++)
 	{
 		auto pWeapon = m_hMyWeapons[i].Get();

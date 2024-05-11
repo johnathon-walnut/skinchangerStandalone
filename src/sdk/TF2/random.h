@@ -12,5 +12,7 @@ public:
 };
 
 // stolen from spook also
-SIGNATURE_INTERFACE(UniformRandomStream, IUniformRandomStream*, "client.dll", 
-					"8B 0D ? ? ? ? 83 EC 08 D9 05 ? ? ? ? 8B 01 D9 5C 24 04 D9 05 ? ? ? ? D9 1C 24 8B 40 04 FF D0 D8 4D A0 D9 7D FA 0F B7 45 FA", 2, 2);
+//SIGNATURE_INTERFACE(UniformRandomStream, IUniformRandomStream*, "client.dll", 
+//					"8B 0D ? ? ? ? 83 EC 08 D9 05 ? ? ? ? 8B 01 D9 5C 24 04 D9 05 ? ? ? ? D9 1C 24 8B 40 04 FF D0 D8 4D A0 D9 7D FA 0F B7 45 FA", 2, 2);
+// 
+// This isn't actually used anywhere - commented out to save myself the hassle of updating it for x64

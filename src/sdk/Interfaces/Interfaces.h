@@ -28,9 +28,10 @@ class SignatureInterface : public Interface
 	size_t m_nOffset = 0x0;
 	size_t m_nDereferenceCount = 0x0;
 	const char* m_szSignature = nullptr;
+	bool m_bRelative = false;
 
 public:
-	SignatureInterface(const char* szName, void** pInterfacePtr, const char* szModule, const char* szSignature, size_t nDereferenceCount = 0x0, size_t nOffset = 0x0);
+	SignatureInterface(const char* szName, void** pInterfacePtr, const char* szModule, const char* szSignature, size_t nDereferenceCount = 0x0, size_t nOffset = 0x0, bool bRelative = false);
 };
 
 class VersionInterface : public Interface
@@ -66,10 +67,10 @@ namespace _I \
 inline VersionInterface name##_Initializer(#name, (void**)&I::name, module, version); \
 }
 
-#define SIGNATURE_INTERFACE(name, type, module, signature, dereferenceCount, offset) namespace I { \
+#define SIGNATURE_INTERFACE(name, type, module, signature, dereferenceCount, offset, ...) namespace I { \
 	inline type name = nullptr; \
 } \
 namespace _I \
 { \
-inline SignatureInterface name##_Initializer(#name, (void**)&I::name, module, signature, dereferenceCount, offset); \
+inline SignatureInterface name##_Initializer(#name, (void**)&I::name, module, signature, dereferenceCount, offset, __VA_ARGS__); \
 }

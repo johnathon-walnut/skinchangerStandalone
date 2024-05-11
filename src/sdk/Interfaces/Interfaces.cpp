@@ -10,11 +10,12 @@ Interface::Interface(const char* szName, void** pInterfacePtr, const char* szMod
 }
 
 SignatureInterface::SignatureInterface(const char* szName, void** pInterfacePtr, const char* szModule, 
-									   const char* szSignature, size_t nDereferenceCount, size_t nOffset) : Interface(szName, pInterfacePtr, szModule)
+									   const char* szSignature, size_t nDereferenceCount, size_t nOffset, bool bRelative) : Interface(szName, pInterfacePtr, szModule)
 {
 	this->m_szSignature = szSignature;
 	this->m_nDereferenceCount = nDereferenceCount;
 	this->m_nOffset = nOffset;
+	this->m_bRelative = bRelative;
 }
 
 VersionInterface::VersionInterface(const char* szName, void** pInterfacePtr, const char* szModule, const char* szVersion) : Interface(szName, pInterfacePtr, szModule)
@@ -43,14 +44,17 @@ void Interfaces::Init()
 
 		if (auto signatureInterface = dynamic_cast<SignatureInterface*>(pInterface))
 		{
-			auto dwAddress = g_Memory.FindSignature(pInterface->m_szModule, signatureInterface->m_szSignature);
-			if (!dwAddress)
+			auto pAddress = g_Memory.FindSignature(pInterface->m_szModule, signatureInterface->m_szSignature);
+			if (!pAddress)
 			{
 				printf("Failed to find %s in %s\n", signatureInterface->m_szName, signatureInterface->m_szModule);
 				exit(EXIT_FAILURE);
 			}
 
-			*pInterface->m_pInterfacePtr = reinterpret_cast<void*>(dwAddress + signatureInterface->m_nOffset);
+			if (signatureInterface->m_bRelative)
+				pAddress = pAddress + 7u + *reinterpret_cast<std::int32_t*>(pAddress + 3u);
+
+			*pInterface->m_pInterfacePtr = reinterpret_cast<void*>(pAddress + signatureInterface->m_nOffset);
 
 			for (size_t dereference = 0; dereference < signatureInterface->m_nDereferenceCount; dereference++)
 				*pInterface->m_pInterfacePtr = *reinterpret_cast<void**>(*pInterface->m_pInterfacePtr);

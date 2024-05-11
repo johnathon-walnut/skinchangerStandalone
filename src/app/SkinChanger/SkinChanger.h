@@ -95,13 +95,13 @@ class Weapon;
 
 #define NETVAR(_name, type, table, name) inline type &_name() \
 { \
-	static int offset = g_Netvars.GetNetvar(table, name); \
-	return *reinterpret_cast<type *>(reinterpret_cast<DWORD>(this) + offset); \
+	static std::size_t offset = g_Netvars.GetNetvar(table, name); \
+	return *reinterpret_cast<type *>(reinterpret_cast<std::uintptr_t>(this) + offset); \
 }
 
 #define NETVAR_OFFSET(_name, type, name, offset) inline type &_name() \
 { \
-	return *reinterpret_cast<type *>(reinterpret_cast<DWORD>(this) + offset); \
+	return *reinterpret_cast<type *>(reinterpret_cast<std::uintptr_t>(this) + offset); \
 }
 
 #define MAX_WEAPONS 48
@@ -118,13 +118,17 @@ public:
 class Weapon
 {
 public:
-	// For wahtever reason CEconEntity -> m_iItemDefinitionIndex only has an offset of like 0x24 bytes
+#ifndef _WIN64
+	// For whatever reason CEconEntity -> m_iItemDefinitionIndex only has an offset of like 0x24 bytes - netvars probably messed up :)
 	NETVAR_OFFSET(m_iItemDefinitionIndex, int, "m_iItemDefinitionIndex", 2364);
+#else
+	NETVAR_OFFSET(m_iItemDefinitionIndex, int, "m_iItemDefinitionIndex", 3344);
+#endif
 };
 
 class SkinChanger
 {
-	std::unordered_map<int, SkinInfo> m_Skins;
+	std::unordered_map<int, SkinInfo> m_Skins = {};
 	bool m_bForceFullUpdate = false;
 	int m_nCurrentWeaponIndex = -1;
 	bool m_bInitialSkinLoad = false;
@@ -138,7 +142,7 @@ public:
 
 	void SetAttribute(int index, std::string attributeStr, float value);
 	void RemoveAttribute(int index, std::string attributeStr);
-	inline const SkinInfo& GetSkinInfo(int index) 
+	inline const SkinInfo& GetSkinInfo(int index)
 	{
 		if (m_Skins.find(index) == m_Skins.end())
 		{

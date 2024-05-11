@@ -2,8 +2,13 @@
 
 DWORD WINAPI MainThread(LPVOID lpParam)
 {
+#ifndef _WIN64
 	while (!GetModuleHandle(L"mss32.dll"))
 		Sleep(500); // In the wise words of spook953: we sleepin'
+#else
+	while (!GetModuleHandle(L"GameUI.dll")) //mss32.dll doesn't get loaded in 64-bit, this seems to be the next latest thing to get called before the game is fully loaded
+		Sleep(500);
+#endif
 
 	g_App.Init();
 
