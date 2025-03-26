@@ -32,12 +32,12 @@ SIGNATURE(CL_ProcessPacketEntitites_FSN_Call, "engine.dll", "E8 ? ? ? ? 48 8B 0D
 
 HOOK(ClientDLL_FrameStageNotify, Sigs::ClientDLL_FrameStageNotify, void, __fastcall, int stage)
 {
-	static bool done = false;
+	/*static bool done = false;
 	if (I::EngineClient->IsInGame() && !done)
 	{
 		g_Netvars.DumpTables();
 		done = true;
-	}
+	}*/
 
 	if (std::uintptr_t(_ReturnAddress()) == Sigs::CL_ProcessPacketEntitites_FSN_Call.Get())
 		g_SkinChanger.ApplySkins();
